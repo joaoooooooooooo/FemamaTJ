@@ -236,7 +236,13 @@ export function QuestionnaireForm({
         >
           {questions.map((question) => (
             <QuestionnaireItem key={question.name} name={question.name} required>
-              <SquircleFrame>
+              <SquircleFrame
+                className={
+                  currentItem === question.name
+                    ? "[animation:questionnaire-frame-in_320ms_cubic-bezier(0.2,0,0,1)] motion-reduce:[animation:none]"
+                    : ""
+                }
+              >
                 {question.type === "text" ? (
                   <div className="px-4 pt-4 sm:px-5 sm:pt-5">
                     <label className="flex flex-col gap-2 text-sm font-medium text-[#5D3D39]">
@@ -265,7 +271,9 @@ export function QuestionnaireForm({
                   </div>
                 ) : null}
 
-                <FrameHeader className="w-full px-1 pt-4 pb-4 group-data-active/questionnaire-item:[animation:questionnaire-content-in_280ms_cubic-bezier(0.2,0,0,1)] motion-reduce:group-data-active/questionnaire-item:[animation:none] sm:px-6">
+                <FrameHeader
+                  className={`w-full px-1 pt-4 pb-4 sm:px-6 ${currentItem === question.name ? "[animation:questionnaire-content-in_280ms_cubic-bezier(0.2,0,0,1)] motion-reduce:[animation:none]" : ""}`}
+                >
                   {question.type !== "text" ? (
                     <div
                       aria-label="Questionnaire progress"
@@ -298,7 +306,9 @@ export function QuestionnaireForm({
 
                 <div className="flex flex-col gap-4 px-4 pb-4 sm:px-5 sm:pb-5">
                   {question.type !== "text" ? (
-                    <QuestionnaireChoices className="gap-3 group-data-active/questionnaire-item:[animation:questionnaire-content-in_360ms_cubic-bezier(0.2,0,0,1)] motion-reduce:group-data-active/questionnaire-item:[animation:none]">
+                    <QuestionnaireChoices
+                      className={`gap-3 ${currentItem === question.name ? "[animation:questionnaire-content-in_360ms_cubic-bezier(0.2,0,0,1)] motion-reduce:[animation:none]" : ""}`}
+                    >
                       {question.options.map((option) => (
                         <QuestionnaireChoice
                           key={option}
