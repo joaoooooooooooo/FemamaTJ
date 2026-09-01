@@ -35,6 +35,7 @@ import { TabletStage } from "@/components/ui/tablet-stage";
 import { FlowerTextPreview } from "@/features/drawings/components/FlowerTextPreview";
 import { getRandomFlowerVariantId } from "@/features/drawings/lib/flowerVariants";
 import { useQuestionnaireForm } from "@/features/questionnaire/hooks/useQuestionnaireForm";
+import { playQuestionnaireSound } from "@/lib/questionnaire-audio";
 import fase1Rive from "@/assets/Fase1.riv?url";
 
 function SquircleFrame({ children, className = "" }) {
@@ -136,11 +137,13 @@ export function QuestionnaireForm({
   function handleForwardTrigger(event) {
     if (hasValidAnswer(event)) {
       setInvalidItemName(null);
+      playQuestionnaireSound("success");
       triggerProxima();
       return;
     }
 
     setInvalidItemName(currentItem);
+    playQuestionnaireSound("error");
   }
 
   async function submitAnswers(answers) {
@@ -301,6 +304,7 @@ export function QuestionnaireForm({
                           key={option}
                           onChange={() => {
                             setInvalidItemName(null);
+                            playQuestionnaireSound("hover");
                           }}
                           value={option}
                           className="rounded-xl px-4 py-3 data-checked:bg-primary-foreground hover:data-checked:bg-primary-foreground"
@@ -341,6 +345,7 @@ export function QuestionnaireForm({
                         className="flex-1 justify-center"
                         size="xl"
                         onClick={() => {
+                          playQuestionnaireSound("delete");
                           triggerAnterior();
                         }}
                       >
