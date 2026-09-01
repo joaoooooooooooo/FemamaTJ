@@ -7,8 +7,6 @@ import DrawnImagesPage from "./pages/DrawnImages";
 import QuestionnairePage from "./pages/Questionnaire";
 // @ts-expect-error JSX page module is consumed by the Vite app at runtime.
 import SavedDrawingsPage from "./pages/SavedDrawings";
-// @ts-expect-error JSX page module is consumed by the Vite app at runtime.
-import FlowerTextsPage from "./pages/FlowerTexts";
 
 function getPageFromPath(pathname: string) {
   if (pathname === "/tree") {
@@ -17,10 +15,6 @@ function getPageFromPath(pathname: string) {
 
   if (pathname === "/saved-drawings") {
     return "saved-drawings";
-  }
-
-  if (pathname === "/flower-texts") {
-    return "flower-texts";
   }
 
   return "questionnaire";
@@ -65,11 +59,6 @@ function App() {
     window.location.assign("/");
   }, []);
 
-  const goToTree = React.useCallback(() => {
-    window.history.pushState({}, "", "/tree");
-    setCurrentPage("tree-camera");
-  }, []);
-
   return (
     <>
       {currentPage === "questionnaire" ? (
@@ -92,17 +81,6 @@ function App() {
             return result;
           }}
           onSubmissionComplete={goHome}
-        />
-      ) : currentPage === "flower-texts" ? (
-        <FlowerTextsPage
-          localFlowers={drawings}
-          remoteFlowers={remoteTree.drawings}
-          remoteError={remoteTree.error}
-          remoteIsLoading={remoteTree.isLoading}
-          remoteIsEnabled={Boolean(treeApiUrl)}
-          onBack={goToQuestionnaire}
-          onRefresh={remoteTree.refresh}
-          onViewTree={goToTree}
         />
       ) : currentPage === "saved-drawings" ? (
         <SavedDrawingsPage

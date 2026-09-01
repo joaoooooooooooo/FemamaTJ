@@ -51,7 +51,12 @@ export function useSavedFlowerDrawings() {
     return drawingEntry;
   }, []);
 
+  const clearDrawings = React.useCallback(() => {
+    setDrawings([]);
+  }, []);
+
   return {
+    clearDrawings,
     drawings,
     saveDrawing,
   };

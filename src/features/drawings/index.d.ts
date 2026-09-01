@@ -3,6 +3,7 @@ import * as React from "react";
 export interface SavedFlowerDrawingPoint {
   x: number;
   y: number;
+  pressure?: number;
 }
 
 export interface SavedFlowerDrawingStroke {
@@ -14,10 +15,20 @@ export interface SavedFlowerDrawingStroke {
 export interface SavedFlowerDrawing {
   id: string;
   createdAt: string;
+  debugLabel?: string;
   flowerVariantId: string;
-  width: number;
-  height: number;
-  strokes: SavedFlowerDrawingStroke[];
+  flowerText?: string;
+  width?: number;
+  height?: number;
+  imageType?: string;
+  imageUrl?: string;
+  strokes?: SavedFlowerDrawingStroke[];
+  svgPaths?: Array<{
+    d: string;
+    fill: string;
+    stroke?: string;
+    strokeWidth?: number;
+  }>;
 }
 
 export function DrawingDialog(props: {
@@ -33,8 +44,23 @@ export function SavedDrawingsPage(props: {
 }): React.ReactElement;
 
 export function useSavedFlowerDrawings(): {
+  clearDrawings: () => void;
   drawings: SavedFlowerDrawing[];
   saveDrawing: (
-    drawing: Omit<SavedFlowerDrawing, "id" | "createdAt">,
+    drawing: Omit<SavedFlowerDrawing, "id" | "createdAt"> & {
+      id?: string;
+    },
   ) => SavedFlowerDrawing;
+};
+
+export function useTreeDrawings(input: {
+  enabled?: boolean;
+  url?: string;
+}): {
+  clear: () => Promise<void>;
+  drawings: SavedFlowerDrawing[];
+  error: string | null;
+  isLoading: boolean;
+  latestDrawingId: string | null;
+  refresh: () => Promise<void>;
 };
