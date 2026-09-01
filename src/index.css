@@ -28,8 +28,9 @@
   --radius-lg: calc(var(--radius) - 0.125rem);
   --radius-xl: calc(var(--radius) + 0.25rem);
   --radius-2xl: calc(var(--radius) + 0.5rem);
-  --sans: "Segoe UI", Arial, sans-serif;
-  --heading: "Segoe UI", Arial, sans-serif;
+  --sans: "Manrope Variable", "Manrope", sans-serif;
+  --heading: "Manrope Variable", "Manrope", sans-serif;
+  --flower: "Lacquer", cursive;
   --mono: Consolas, "Courier New", monospace;
   --success: oklch(0.7 0.16 155);
   --success-foreground: oklch(0.3 0.07 155);
@@ -153,4 +154,38 @@ h6 {
 
 .cn-font-heading {
   font-family: var(--heading);
+}
+
+@keyframes questionnaire-frame-in {
+  from {
+    transform: translateY(12px) scale(0.985);
+    box-shadow: 0 14px 34px rgba(180, 94, 113, 0.08);
+  }
+
+  to {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 24px 60px rgba(180, 94, 113, 0.12);
+  }
+}
+
+@keyframes questionnaire-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes questionnaire-progress-width-in {
+  from {
+    width: var(--progress-from);
+  }
+
+  to {
+    width: var(--progress-to);
+  }
 }
