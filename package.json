@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "node scripts/dev.mjs",
+    "dev:app": "vite",
+    "dev:worker": "npm --prefix worker run dev",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview"
@@ -22,6 +24,7 @@
     "clsx": "^2.1.1",
     "forminit": "^0.2.4",
     "lucide-react": "^1.33.0",
+    "perfect-freehand": "^1.2.3",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-native-figma-squircle": "^0.4.0",

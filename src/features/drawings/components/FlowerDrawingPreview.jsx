@@ -8,36 +8,37 @@ export function FlowerDrawingPreview({
   unstyled = false,
 }) {
   const canvasRef = React.useRef(null);
-  const maskCanvasRef = React.useRef(null);
   const imageRef = React.useRef(null);
   const flowerImage = getFlowerVariantById(drawing.flowerVariantId).imageSrc;
+  const devicePixelRatio = typeof window === "undefined" ? 1 : window.devicePixelRatio || 1;
 
   React.useEffect(() => {
+    if (drawing.svgPaths?.length) {
+      return undefined;
+    }
+
     const image = new Image();
     image.src = flowerImage;
     image.onload = () => {
       imageRef.current = image;
 
       const canvas = canvasRef.current;
-      const maskCanvas = maskCanvasRef.current;
 
-      if (!canvas || !maskCanvas) {
+      if (!canvas) {
         return;
       }
 
-      canvas.width = 320;
-      canvas.height = 320;
-      maskCanvas.width = 320;
-      maskCanvas.height = 320;
+      canvas.width = Math.round(320 * devicePixelRatio);
+      canvas.height = Math.round(320 * devicePixelRatio);
 
       renderDrawingToCanvas({
         canvas,
         drawing,
         image,
-        maskCanvas,
+        pixelRatio: devicePixelRatio,
       });
     };
-  }, [drawing, flowerImage]);
+  }, [devicePixelRatio, drawing, flowerImage]);
 
   return (
     <div
@@ -45,16 +46,56 @@ export function FlowerDrawingPreview({
         unstyled ? "" : "rounded-[28px] bg-white/80"
       } ${className}`}
     >
+      {drawing.imageUrl ? (
+        <img
+          src={drawing.imageUrl}
+          alt="Flor desenhada enviada"
+          className="absolute inset-0 h-full w-full object-contain"
+        />
+      ) : null}
       <img
         src={flowerImage}
         alt=""
-        className="absolute inset-0 h-full w-full object-contain"
+        className={`absolute inset-0 h-full w-full object-contain ${drawing.imageUrl ? "hidden" : ""}`}
       />
+      {drawing.svgPaths?.length ? (
+        <div
+          aria-hidden="true"
+          className="absolute inset-0"
+          style={{
+            WebkitMaskImage: `url(${flowerImage})`,
+            WebkitMaskPosition: "center",
+            WebkitMaskRepeat: "no-repeat",
+            WebkitMaskSize: "contain",
+            maskImage: `url(${flowerImage})`,
+            maskPosition: "center",
+            maskRepeat: "no-repeat",
+            maskSize: "contain",
+          }}
+        >
+          <svg
+            className="h-full w-full"
+            viewBox={`0 0 ${drawing.width} ${drawing.height}`}
+            preserveAspectRatio="xMidYMid meet"
+          >
+            {drawing.svgPaths.map((path, index) => (
+              <path
+                key={`${index}-${path.d.slice(0, 12)}`}
+                d={path.d}
+                fill={path.fill ?? "none"}
+                stroke={path.stroke}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={path.strokeWidth}
+              />
+            ))}
+          </svg>
+        </div>
+      ) : null}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 h-full w-full"
+        className={`absolute inset-0 h-full w-full ${drawing.svgPaths?.length || drawing.imageUrl ? "hidden" : ""}`}
       />
-      <canvas ref={maskCanvasRef} className="hidden" aria-hidden="true" />
     </div>
   );
 }
