@@ -1,0 +1,19 @@
+{
+  "name": "femama-tree",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-26",
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "TREE_STORE",
+        "class_name": "TreeStore"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["TreeStore"]
+    }
+  ]
+}

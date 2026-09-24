@@ -131,6 +131,17 @@ body {
   background: var(--background);
 }
 
+html,
+body {
+  overscroll-behavior: none;
+}
+
+/* Full-screen game stages do not scroll; admin and gallery pages still can. */
+html:has([data-tablet-stage]),
+body:has([data-tablet-stage]) {
+  overflow: hidden;
+}
+
 #root {
   width: 100%;
 }

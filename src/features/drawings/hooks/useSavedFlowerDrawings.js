@@ -38,6 +38,16 @@ export function useSavedFlowerDrawings() {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(drawings));
   }, [drawings]);
 
+  React.useEffect(() => {
+    const syncDrawings = (event) => {
+      if (event.storageArea === window.localStorage && (event.key === STORAGE_KEY || event.key === null)) {
+        setDrawings(readSavedDrawings());
+      }
+    };
+    window.addEventListener("storage", syncDrawings);
+    return () => window.removeEventListener("storage", syncDrawings);
+  }, []);
+
   const saveDrawing = React.useCallback((drawing) => {
     const drawingEntry = {
       id: crypto.randomUUID(),
@@ -55,9 +65,14 @@ export function useSavedFlowerDrawings() {
     setDrawings([]);
   }, []);
 
+  const removeDrawing = React.useCallback((id) => {
+    setDrawings((current) => current.filter((drawing) => drawing.id !== id));
+  }, []);
+
   return {
     clearDrawings,
     drawings,
+    removeDrawing,
     saveDrawing,
   };
 }

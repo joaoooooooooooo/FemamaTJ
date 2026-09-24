@@ -7,8 +7,11 @@ import DrawnImagesPage from "./pages/DrawnImages";
 import QuestionnairePage from "./pages/Questionnaire";
 // @ts-expect-error JSX page module is consumed by the Vite app at runtime.
 import SavedDrawingsPage from "./pages/SavedDrawings";
+// @ts-expect-error JSX page module is consumed by the Vite app at runtime.
+import AdminPage from "./pages/Admin";
 
 function getPageFromPath(pathname: string) {
+  if (pathname === "/admin" || pathname === "/admin/") return "admin";
   if (pathname === "/tree") {
     return "tree-camera";
   }
@@ -21,7 +24,7 @@ function getPageFromPath(pathname: string) {
 }
 
 function App() {
-  const { clearDrawings, drawings, saveDrawing } = useSavedFlowerDrawings();
+  const { clearDrawings, drawings, removeDrawing, saveDrawing } = useSavedFlowerDrawings();
   const treeApiUrl = import.meta.env.VITE_TREE_API_URL?.trim() ?? "";
   const remoteTree = useTreeDrawings({
     enabled: Boolean(treeApiUrl),
@@ -29,16 +32,11 @@ function App() {
   });
   const [currentPage, setCurrentPage] = React.useState(() => getPageFromPath(window.location.pathname));
   const treeFlowers = React.useMemo(() => {
-    const flowersById = new Map();
-
-    [...drawings, ...remoteTree.drawings].forEach((flower) => {
-      flowersById.set(flower.id, flower);
-    });
-
-    return Array.from(flowersById.values()).sort((left, right) => (
+    // The online tree is authoritative, including removals made on another device.
+    return [...(treeApiUrl ? remoteTree.drawings : drawings)].sort((left, right) => (
       Date.parse(right.createdAt ?? "") - Date.parse(left.createdAt ?? "")
     ));
-  }, [drawings, remoteTree.drawings]);
+  }, [drawings, remoteTree.drawings, treeApiUrl]);
 
   React.useEffect(() => {
     const handlePopState = () => {
@@ -61,7 +59,30 @@ function App() {
 
   return (
     <>
-      {currentPage === "questionnaire" ? (
+      {currentPage === "admin" ? (
+        <AdminPage
+          drawings={treeFlowers}
+          error={treeApiUrl ? remoteTree.error : null}
+          isLoading={treeApiUrl ? remoteTree.isLoading : false}
+          onRefresh={treeApiUrl ? remoteTree.refresh : undefined}
+          onRemove={async (id: string) => {
+            if (treeApiUrl) {
+              const result = await remoteTree.remove(id);
+              if (result.error) return result;
+            }
+            removeDrawing(id);
+            return { error: null };
+          }}
+          onClearAll={async () => {
+            if (treeApiUrl) {
+              const result = await remoteTree.clear();
+              if (result.error) return result;
+            }
+            clearDrawings();
+            return { error: null };
+          }}
+        />
+      ) : currentPage === "questionnaire" ? (
         <QuestionnairePage
           onStartDrawing={async (answers: Record<string, FormDataEntryValue | null>, flowerVariantId: string) => {
             const { submitQuestionnaireAnswers } = await import("@/lib/forminit-questionnaire");

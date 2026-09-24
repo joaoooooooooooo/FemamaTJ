@@ -20,6 +20,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
+  Drawer,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerPopup,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import {
   Questionnaire,
   QuestionnaireActions,
   QuestionnaireChoice,
@@ -98,7 +105,10 @@ export function QuestionnaireForm({
   const [submitError, setSubmitError] = React.useState(null);
   const [flowerText, setFlowerText] = React.useState("");
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = React.useState(false);
+  const [isGlossaryDrawerOpen, setIsGlossaryDrawerOpen] = React.useState(false);
+  const [activeGlossaryQuestionName, setActiveGlossaryQuestionName] = React.useState(null);
   const [flowerVariantId] = React.useState(() => getRandomFlowerVariantId());
+  const drawerPortalRef = React.useRef(null);
   const currentQuestionIndex = Math.max(
     questions.findIndex((question) => question.name === currentItem),
     0,
@@ -106,6 +116,9 @@ export function QuestionnaireForm({
   const currentQuestionNumber = currentQuestionIndex + 1;
   const progressPercent = (currentQuestionNumber / questions.length) * 100;
   const previousProgressPercent = previousProgressPercentRef.current;
+  const activeGlossaryQuestion = questions.find(
+    (question) => question.name === activeGlossaryQuestionName,
+  );
 
   React.useEffect(() => {
     previousProgressPercentRef.current = progressPercent;
@@ -139,6 +152,15 @@ export function QuestionnaireForm({
     if (hasValidAnswer(event)) {
       setInvalidItemName(null);
       playQuestionnaireSound("success");
+      const currentQuestion = questions.find((question) => question.name === currentItem);
+
+      if (currentQuestion?.glossaryDrawer) {
+        event.preventDefault();
+        setActiveGlossaryQuestionName(currentQuestion.name);
+        setIsGlossaryDrawerOpen(true);
+        return;
+      }
+
       triggerProxima();
       return;
     }
@@ -197,21 +219,38 @@ export function QuestionnaireForm({
     triggerProxima();
   }
 
+  function handleGlossaryDrawerOpenChange(nextOpen) {
+    setIsGlossaryDrawerOpen(nextOpen);
+  }
+
+  function handleGlossaryDrawerOpenChangeComplete(nextOpen) {
+    if (nextOpen || !activeGlossaryQuestionName) {
+      return;
+    }
+
+    const activeQuestionIndex = questions.findIndex(
+      (question) => question.name === activeGlossaryQuestionName,
+    );
+    const nextQuestion = questions[activeQuestionIndex + 1];
+
+    if (!nextQuestion) {
+      setActiveGlossaryQuestionName(null);
+      return;
+    }
+
+    triggerProxima();
+    setCurrentItem(nextQuestion.name);
+    setInvalidItemName(null);
+    setActiveGlossaryQuestionName(null);
+  }
+
   return (
     <TabletStage>
-      <div className="relative flex h-full w-full items-end justify-center overflow-hidden bg-[#F7F0EE] px-6 py-6">
+      <div
+        ref={drawerPortalRef}
+        className="relative flex h-full w-full flex-col items-center justify-end gap-6 overflow-hidden bg-[#F7F0EE] px-6 pt-6 pb-[max(24px,env(safe-area-inset-bottom))] [transform:translateZ(0)]"
+      >
         {element}
-
-        {!hasStarted ? (
-          <img
-            src={novartisLogo}
-            alt="Patrocínio: Novartis"
-            width={2363}
-            height={354}
-            className="pointer-events-none absolute top-[max(24px,env(safe-area-inset-top))] left-1/2 z-10 h-auto w-36 max-w-[40%] -translate-x-1/2 brightness-0 invert"
-            draggable={false}
-          />
-        ) : null}
 
         {hasStarted && currentItem === "flower_text" ? (
           <div className="pointer-events-none absolute inset-x-6 top-[8%] bottom-[31%] z-[5] flex items-center justify-center sm:inset-x-10 sm:top-[7%] sm:bottom-[30%]">
@@ -422,15 +461,24 @@ export function QuestionnaireForm({
               </SquircleFrame>
             </QuestionnaireItem>
           ))}
-          <img
-            src={novartisLogo}
-            alt="Patrocínio: Novartis"
-            width={2363}
-            height={354}
-            className="h-auto w-36 max-w-full shrink-0 self-center brightness-0 invert"
-            draggable={false}
-          />
         </Questionnaire>
+
+        <span
+          role="img"
+          aria-label="Patrocínio: Novartis"
+          className="pointer-events-none relative z-10 block aspect-[2363/354] w-36 max-w-full shrink-0"
+          style={{
+            backgroundColor: !hasStarted || currentItem === "flower_text" ? "#B45E71" : "#FBFAFA",
+            maskImage: `url("${novartisLogo}")`,
+            maskSize: "contain",
+            maskPosition: "center",
+            maskRepeat: "no-repeat",
+            WebkitMaskImage: `url("${novartisLogo}")`,
+            WebkitMaskSize: "contain",
+            WebkitMaskPosition: "center",
+            WebkitMaskRepeat: "no-repeat",
+          }}
+        />
 
         <Dialog open={isSuccessDialogOpen}>
           <DialogPopup
@@ -446,6 +494,29 @@ export function QuestionnaireForm({
             </DialogHeader>
           </DialogPopup>
         </Dialog>
+
+        <Drawer
+          open={isGlossaryDrawerOpen}
+          onOpenChange={handleGlossaryDrawerOpenChange}
+          onOpenChangeComplete={handleGlossaryDrawerOpenChangeComplete}
+        >
+          <DrawerPopup
+            position="bottom"
+            variant="default"
+            showBar={false}
+            className="rounded-t-[28px] border-border/60 bg-background"
+            portalProps={{ container: drawerPortalRef }}
+          >
+            <DrawerHeader className="gap-3 px-6 pt-6 pb-6 sm:px-7">
+              <DrawerTitle className="text-[40px] leading-tight font-semibold text-foreground">
+                {activeGlossaryQuestion?.glossaryDrawer?.title}
+              </DrawerTitle>
+              <DrawerDescription className="text-[24px] leading-relaxed text-muted-foreground">
+                {activeGlossaryQuestion?.glossaryDrawer?.description}
+              </DrawerDescription>
+            </DrawerHeader>
+          </DrawerPopup>
+        </Drawer>
       </div>
     </TabletStage>
   );

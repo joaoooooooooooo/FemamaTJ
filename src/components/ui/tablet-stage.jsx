@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Switch } from "@/components/ui/switch";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 const TABLET_WIDTH = 800;
 const TABLET_HEIGHT = 1280;
@@ -19,8 +20,10 @@ function getTabletScale() {
 
 export function TabletStage({ children, overlay = null, className = "" }) {
   const [scale, setScale] = React.useState(() => getTabletScale());
-  const [isProportionalSizingEnabled, setIsProportionalSizingEnabled] =
+  const isMobileOrTablet = useMediaQuery("(max-width: 1024px), (any-pointer: coarse)");
+  const [isDesktopProportionEnabled, setIsDesktopProportionEnabled] =
     React.useState(true);
+  const isProportionalSizingEnabled = !isMobileOrTablet && isDesktopProportionEnabled;
   const displayScale = isProportionalSizingEnabled ? scale : 1;
   const stageWidth = isProportionalSizingEnabled
     ? `${TABLET_WIDTH * displayScale}px`
@@ -41,14 +44,16 @@ export function TabletStage({ children, overlay = null, className = "" }) {
   }, []);
 
   return (
-    <div className="relative h-dvh w-full overflow-hidden bg-[#EDE2DF]">
+    <div data-tablet-stage className="relative h-dvh w-full overflow-hidden overscroll-none bg-[#EDE2DF]">
+      {!isMobileOrTablet ? (
       <label className="absolute top-4 right-4 z-30 flex items-center gap-2 rounded-full border border-[#D8C1BC]/80 bg-[#FBFAFA]/90 px-2.5 py-1.5 text-xs font-medium text-[#5D3D39] shadow-sm backdrop-blur-sm">
         <span>Proporção</span>
         <Switch
           checked={isProportionalSizingEnabled}
-          onCheckedChange={setIsProportionalSizingEnabled}
+          onCheckedChange={setIsDesktopProportionEnabled}
         />
       </label>
+      ) : null}
 
       {overlay ? (
         <div className="pointer-events-none absolute inset-x-0 top-0 z-20 p-4 sm:p-5">

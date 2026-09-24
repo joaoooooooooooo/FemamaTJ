@@ -45,6 +45,7 @@ export function SavedDrawingsPage(props: {
 
 export function useSavedFlowerDrawings(): {
   clearDrawings: () => void;
+  removeDrawing: (id: string) => void;
   drawings: SavedFlowerDrawing[];
   saveDrawing: (
     drawing: Omit<SavedFlowerDrawing, "id" | "createdAt"> & {
@@ -57,7 +58,8 @@ export function useTreeDrawings(input: {
   enabled?: boolean;
   url?: string;
 }): {
-  clear: () => Promise<void>;
+  clear: () => Promise<{ error: string | null }>;
+  remove: (id: string) => Promise<{ error: string | null }>;
   drawings: SavedFlowerDrawing[];
   error: string | null;
   isLoading: boolean;

@@ -25,3 +25,6 @@ dist-ssr
 
 .vercel
 .env*
+worker/.dev.vars
+worker/.wrangler/
+worker/src/index.js

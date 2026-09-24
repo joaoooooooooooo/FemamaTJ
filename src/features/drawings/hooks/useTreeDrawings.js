@@ -1,148 +1,79 @@
-import * as React from "react";
+﻿import * as React from "react";
+import { deleteTreeDrawings, fetchAllTreeDrawings } from "@/features/drawings/lib/tree-api";
 
 const TREE_REFRESH_INTERVAL_MS = 3000;
-
-function normalizeTreeFlower(flower) {
-  return {
-    ...flower,
-    flowerText: flower.flowerText ?? flower.flower_text ?? "",
-    flowerVariantId: flower.flowerVariantId ?? flower.flower_variant_id ?? "flower-1",
-  };
-}
 
 export function useTreeDrawings({ enabled = false, url = "" }) {
   const [drawings, setDrawings] = React.useState([]);
   const [error, setError] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(Boolean(enabled));
   const [latestDrawingId, setLatestDrawingId] = React.useState(null);
-  const hasFetchedRef = React.useRef(false);
   const abortControllerRef = React.useRef(null);
-  const latestDrawingIdRef = React.useRef(null);
+  const isMutatingRef = React.useRef(false);
 
   const fetchDrawings = React.useCallback(async () => {
-    if (!enabled || !url) {
-      return;
-    }
-
-    abortControllerRef.current?.abort?.();
-    const abortController = new AbortController();
-    abortControllerRef.current = abortController;
-
+    if (!enabled || !url || isMutatingRef.current) return;
+    abortControllerRef.current?.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
     setIsLoading(true);
-    setError(null);
-
     try {
-      const response = await fetch(`${url.replace(/\/$/, "")}/tree?page=1&size=100`, {
-        headers: {
-          Accept: "application/json",
-        },
-        signal: abortController.signal,
-      });
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        throw new Error(result.message || "Nao foi possivel carregar a arvore online.");
-      }
-
-      setDrawings(
-        Array.isArray(result.drawings)
-          ? result.drawings.map(normalizeTreeFlower)
-          : [],
-      );
-
-      if (latestDrawingIdRef.current !== (result.latestDrawingId ?? null)) {
-        setLatestDrawingId(result.latestDrawingId ?? null);
-        latestDrawingIdRef.current = result.latestDrawingId ?? null;
-      }
+      const result = await fetchAllTreeDrawings(url, controller.signal);
+      if (controller.signal.aborted) return;
+      setDrawings(result.drawings);
+      setLatestDrawingId(result.latestDrawingId);
+      setError(null);
     } catch (fetchError) {
-      if (fetchError instanceof DOMException && fetchError.name === "AbortError") {
-        return;
+      if (!controller.signal.aborted) {
+        setError(fetchError instanceof Error ? fetchError.message : "Não foi possível carregar as flores. Tente novamente.");
       }
-
-      setError(
-        fetchError instanceof Error
-          ? fetchError.message
-          : "Nao foi possivel carregar a arvore online.",
-      );
     } finally {
-      setIsLoading(false);
+      if (abortControllerRef.current === controller) {
+        abortControllerRef.current = null;
+        setIsLoading(false);
+      }
     }
   }, [enabled, url]);
 
-  const clearDrawings = React.useCallback(async () => {
-    if (!enabled || !url) {
-      return;
+  const deleteDrawings = React.useCallback(async (id) => {
+    if (!enabled || !url || isMutatingRef.current) {
+      return { error: "Não foi possível excluir agora. Tente novamente." };
     }
-
-    setError(null);
-
+    isMutatingRef.current = true;
+    // A list fetched before the deletion must never restore deleted flowers.
+    abortControllerRef.current?.abort();
+    setIsLoading(false);
     try {
-      const response = await fetch(`${url.replace(/\/$/, "")}/tree`, {
-        method: "DELETE",
-      });
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        throw new Error(result.message || "Nao foi possivel limpar a arvore online.");
-      }
-
-      latestDrawingIdRef.current = null;
-      setLatestDrawingId(null);
-      setDrawings([]);
-    } catch (clearError) {
-      setError(
-        clearError instanceof Error
-          ? clearError.message
-          : "Nao foi possivel limpar a arvore online.",
-      );
+      await deleteTreeDrawings(url, id);
+      setDrawings((current) => id === undefined ? [] : current.filter((flower) => flower.id !== id));
+      setLatestDrawingId((current) => id === undefined || current === id ? null : current);
+      setError(null);
+      return { error: null };
+    } catch {
+      return { error: "Não foi possível excluir as flores. Verifique a conexão e tente novamente." };
+    } finally {
+      isMutatingRef.current = false;
     }
   }, [enabled, url]);
 
-  React.useEffect(() => {
-    if (!enabled || !url) {
-      hasFetchedRef.current = false;
-      abortControllerRef.current?.abort?.();
-      return;
-    }
-
-    if (hasFetchedRef.current) {
-      return;
-    }
-
-    hasFetchedRef.current = true;
-    fetchDrawings();
-
-    return () => {
-      abortControllerRef.current?.abort?.();
-    };
-  }, [enabled, fetchDrawings, url]);
+  const clearDrawings = React.useCallback(() => deleteDrawings(), [deleteDrawings]);
 
   React.useEffect(() => {
-    if (!enabled || !url) {
-      return;
-    }
-
+    if (!enabled || !url) return;
+    void fetchDrawings();
     const refreshIfVisible = () => {
-      if (document.visibilityState === "visible") {
-        fetchDrawings();
+      if (document.visibilityState === "visible" && !isMutatingRef.current && !abortControllerRef.current) {
+        void fetchDrawings();
       }
     };
-
-    const intervalId = window.setInterval(refreshIfVisible, TREE_REFRESH_INTERVAL_MS);
+    const interval = window.setInterval(refreshIfVisible, TREE_REFRESH_INTERVAL_MS);
     document.addEventListener("visibilitychange", refreshIfVisible);
-
     return () => {
-      window.clearInterval(intervalId);
+      abortControllerRef.current?.abort();
+      window.clearInterval(interval);
       document.removeEventListener("visibilitychange", refreshIfVisible);
     };
   }, [enabled, fetchDrawings, url]);
 
-  return {
-    clear: clearDrawings,
-    drawings,
-    error,
-    isLoading,
-    latestDrawingId,
-    refresh: fetchDrawings,
-  };
+  return { clear: clearDrawings, remove: deleteDrawings, drawings, error, isLoading, latestDrawingId, refresh: fetchDrawings };
 }

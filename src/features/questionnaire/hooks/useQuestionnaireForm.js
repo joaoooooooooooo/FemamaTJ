@@ -38,22 +38,31 @@ export const questionnaireQuestions = [
     name: "adjuvante_neoadjuvante",
     question:
       "Sobre o tratamento do câncer de mama, você sabe a diferença entre tratamento adjuvante e neoadjuvante?",
-    description:
-      "Neoadjuvante: realizado antes da cirurgia para diminuir o tumor e avaliar a resposta do tratamento. Adjuvante: realizado após a cirurgia com o objetivo de eliminar a doença e reduzir o risco de reincidência.",
+    glossaryDrawer: {
+      title: "Adjuvante e neoadjuvante:",
+      description:
+        "Neoadjuvante: realizado antes da cirurgia para diminuir o tumor e avaliar a resposta do tratamento. Adjuvante: realizado após a cirurgia com o objetivo de eliminar a doença e reduzir o risco de reincidência.",
+    },
     options: ["Sim", "Não"],
   },
   {
     name: "recidiva",
     question: "Você sabe o que significa recidiva?",
-    description:
-      "Recidiva: retorno de uma doença após um período de remissão ou aparente cura.",
+    glossaryDrawer: {
+      title: "Recidiva:",
+      description:
+        "Retorno de uma doença após um período de remissão ou aparente cura.",
+    },
     options: ["Sim", "Não"],
   },
   {
     name: "metastase",
     question: "Você sabe o que é uma metástase?",
-    description:
-      "Metástase: ocorre quando as células do câncer se espalham para diferentes partes do corpo.",
+    glossaryDrawer: {
+      title: "Metástase:",
+      description:
+        "Ocorre quando as células do câncer se espalham para diferentes partes do corpo.",
+    },
     options: ["Sim", "Não"],
   },
   {
@@ -83,7 +92,7 @@ export const questionnaireQuestions = [
   {
     name: "flower_text",
     question: "Escreva uma mensagem para a sua flor",
-    description: "Sua mensagem aparecera na arvore junto com as demais flores.",
+    description: "Sua mensagem aparecerá na árvore junto com as demais flores.",
     type: "text",
   },
 ];
