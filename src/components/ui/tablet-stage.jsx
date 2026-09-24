@@ -27,7 +27,7 @@ export function TabletStage({ children, overlay = null, className = "" }) {
     : "100%";
   const stageHeight = isProportionalSizingEnabled
     ? `${TABLET_HEIGHT * displayScale}px`
-    : "100dvh";
+    : "100%";
 
   React.useLayoutEffect(() => {
     const updateScale = () => {
@@ -41,7 +41,7 @@ export function TabletStage({ children, overlay = null, className = "" }) {
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-[#EDE2DF]">
+    <div className="relative h-dvh w-full overflow-hidden bg-[#EDE2DF]">
       <label className="absolute top-4 right-4 z-30 flex items-center gap-2 rounded-full border border-[#D8C1BC]/80 bg-[#FBFAFA]/90 px-2.5 py-1.5 text-xs font-medium text-[#5D3D39] shadow-sm backdrop-blur-sm">
         <span>Proporção</span>
         <Switch
@@ -57,7 +57,7 @@ export function TabletStage({ children, overlay = null, className = "" }) {
       ) : null}
 
       <div
-        className={`flex min-h-screen items-center justify-center ${isProportionalSizingEnabled ? "p-4" : "p-0"}`}
+        className={`flex h-full min-h-0 min-w-0 items-center justify-center ${isProportionalSizingEnabled ? "p-4" : "p-0"}`}
       >
         <div
           className="relative shrink-0 overflow-hidden"

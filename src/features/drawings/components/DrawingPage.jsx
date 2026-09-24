@@ -266,8 +266,8 @@ export function DrawingPage({ flowerVariantId, onBack, onSave }) {
         </div>
       )}
     >
-      <div className="h-full overflow-y-auto bg-[#F7F0EE] px-6 py-8">
-        <div className="mx-auto flex w-full max-w-5xl flex-col gap-8">
+      <div className="h-full min-h-0 overflow-hidden bg-[#F7F0EE] px-6 pt-28 pb-4">
+        <div className="mx-auto flex h-full min-h-0 w-full flex-col gap-4">
           <div className="flex flex-col gap-5">
             <div className="max-w-2xl">
               <div className="text-xs font-semibold tracking-[0.22em] text-[#B76E79] uppercase">
@@ -299,10 +299,10 @@ export function DrawingPage({ flowerVariantId, onBack, onSave }) {
             </div>
           ) : null}
 
-          <div>
+          <div className="min-h-0 flex-1">
             <div
               ref={containerRef}
-              className="relative mx-auto aspect-[4/5] w-full max-w-[620px] overflow-hidden"
+              className="relative h-full w-full overflow-hidden"
             >
               <div className="absolute inset-0 flex items-center justify-center">
                 <div

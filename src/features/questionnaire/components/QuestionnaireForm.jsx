@@ -37,6 +37,7 @@ import { getRandomFlowerVariantId } from "@/features/drawings/lib/flowerVariants
 import { useQuestionnaireForm } from "@/features/questionnaire/hooks/useQuestionnaireForm";
 import { playQuestionnaireSound } from "@/lib/questionnaire-audio";
 import fase1Rive from "@/assets/Fase1.riv?url";
+import novartisLogo from "@/assets/novartis-logo.png";
 
 function SquircleFrame({ children, className = "" }) {
   return (
@@ -200,6 +201,17 @@ export function QuestionnaireForm({
     <TabletStage>
       <div className="relative flex h-full w-full items-end justify-center overflow-hidden bg-[#F7F0EE] px-6 py-6">
         {element}
+
+        {!hasStarted ? (
+          <img
+            src={novartisLogo}
+            alt="Patrocínio: Novartis"
+            width={2363}
+            height={354}
+            className="pointer-events-none absolute top-[max(24px,env(safe-area-inset-top))] left-1/2 z-10 h-auto w-36 max-w-[40%] -translate-x-1/2 brightness-0 invert"
+            draggable={false}
+          />
+        ) : null}
 
         {hasStarted && currentItem === "flower_text" ? (
           <div className="pointer-events-none absolute inset-x-6 top-[8%] bottom-[31%] z-[5] flex items-center justify-center sm:inset-x-10 sm:top-[7%] sm:bottom-[30%]">
@@ -410,6 +422,14 @@ export function QuestionnaireForm({
               </SquircleFrame>
             </QuestionnaireItem>
           ))}
+          <img
+            src={novartisLogo}
+            alt="Patrocínio: Novartis"
+            width={2363}
+            height={354}
+            className="h-auto w-36 max-w-full shrink-0 self-center brightness-0 invert"
+            draggable={false}
+          />
         </Questionnaire>
 
         <Dialog open={isSuccessDialogOpen}>
