@@ -1,9 +1,28 @@
 import frameVisibleImage from "@/assets/Frame Visible02.svg";
 import frameRefImage from "@/assets/Frame Ref02.svg";
 import * as React from "react";
+import { Alignment, Fit, Layout, useRive } from "@rive-app/react-webgl2";
+import fase1Rive from "@/assets/Fase1.riv?url";
 import { Plus, X } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { FlowerTextPreview } from "@/features/drawings/components/FlowerTextPreview";
 import { FLOWER_VARIANTS } from "@/features/drawings/lib/flowerVariants";
+
+const TreeBackground = React.memo(function TreeBackground() {
+  const { RiveComponent } = useRive({
+    src: fase1Rive,
+    artboard: "Bg Tree",
+    stateMachines: "BG Tree",
+    autoplay: true,
+    layout: new Layout({ fit: Fit.Cover, alignment: Alignment.Center }),
+  });
+
+  return (
+    <div data-tree-background aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <RiveComponent className="h-full w-full" />
+    </div>
+  );
+});
 
 const FRAME_VIEWBOX = {
   width: 3026,
@@ -97,7 +116,6 @@ function DrawnImages({
   isLoading,
   isRemote = false,
   latestAddedDrawingId,
-  onBack,
   onClearAll,
   onRefresh,
 }) {
@@ -138,7 +156,6 @@ function DrawnImages({
     }
 
     setStressTestDrawings(createStressTestDrawings());
-    setIsAutoPlayEnabled(true);
   }
 
   React.useLayoutEffect(() => {
@@ -164,7 +181,7 @@ function DrawnImages({
     };
   }, []);
 
-  const animateCameraToPoint = React.useCallback((point, nextScale = null) => {
+  const animateCameraToPoint = React.useCallback((point) => {
     if (!point) {
       return;
     }
@@ -179,41 +196,42 @@ function DrawnImages({
           ...currentCamera,
           x,
           y,
-          scale: nextScale ?? currentCamera.scale,
+          scale: Math.max(currentCamera.scale, 1.45),
         }));
       });
     });
   }, []);
 
   React.useEffect(() => {
-    if (!drawingTargets.length) {
+    if (!isAutoPlayEnabled || !drawingTargets.length) {
       return;
     }
 
-    if (lastAutoFocusedDrawingIdRef.current === latestAddedDrawingId) {
+    const latestFocusId = latestAddedDrawingId ?? drawingTargets[0].drawing.id;
+    if (lastAutoFocusedDrawingIdRef.current === latestFocusId) {
       return;
     }
 
-    const latestIndex = latestAddedDrawingId
-      ? drawingTargets.findIndex((target) => target.drawing.id === latestAddedDrawingId)
-      : 0;
+    const latestIndex = drawingTargets.findIndex((target) => target.drawing.id === latestFocusId);
     const nextSelectedIndex = latestIndex >= 0 ? latestIndex : 0;
 
-    lastAutoFocusedDrawingIdRef.current = latestAddedDrawingId ?? null;
+    lastAutoFocusedDrawingIdRef.current = latestFocusId;
     setSelectedDrawingIndex(nextSelectedIndex);
-    animateCameraToPoint(drawingTargets[nextSelectedIndex].point, Math.max(camera.scale, 1.45));
-  }, [animateCameraToPoint, camera.scale, drawingTargets, latestAddedDrawingId]);
+  }, [isAutoPlayEnabled, drawingTargets, latestAddedDrawingId]);
+
+  const selectedTarget = drawingTargets[selectedDrawingIndex];
+  const selectedTargetId = selectedTarget?.drawing.id;
+  const selectedTargetX = selectedTarget?.point.x;
+  const selectedTargetY = selectedTarget?.point.y;
 
   React.useEffect(() => {
-    if (!drawingTargets.length || !drawingTargets[selectedDrawingIndex]) {
+    if (!isAutoPlayEnabled || selectedTargetX === undefined || selectedTargetY === undefined) {
       return;
     }
 
-    animateCameraToPoint(
-      drawingTargets[selectedDrawingIndex].point,
-      Math.max(camera.scale, 1.45),
-    );
-  }, [animateCameraToPoint, camera.scale, drawingTargets, selectedDrawingIndex]);
+    animateCameraToPoint({ x: selectedTargetX, y: selectedTargetY });
+    return () => window.cancelAnimationFrame(animationFrameRef.current);
+  }, [animateCameraToPoint, isAutoPlayEnabled, selectedTargetId, selectedTargetX, selectedTargetY]);
 
   React.useEffect(() => {
     if (!isAutoPlayEnabled || drawingTargets.length < 2) {
@@ -241,30 +259,17 @@ function DrawnImages({
     (viewportSize.height / 2) - (camera.y * scaledFrameHeight);
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-[#F7F0EE]">
+    <div className="relative h-dvh w-full overflow-hidden bg-[#F7F0EE]">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-30 p-4 sm:p-6">
         <div className="flex items-start justify-between gap-4">
           {isDebugOpen ? (
           <div className="pointer-events-auto rounded-2xl bg-white/85 px-4 py-3 shadow-sm backdrop-blur-sm">
             <div className="flex items-center justify-between gap-6">
               <div className="text-sm font-medium text-[#5D3D39]">Debug da arvore</div>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={isAutoPlayEnabled}
-                className="flex items-center gap-2 text-xs font-medium text-[#5D3D39]"
-                onClick={() => setIsAutoPlayEnabled((isEnabled) => !isEnabled)}
-              >
-                Animacao automatica
-                <span
-                  aria-hidden="true"
-                  className={`relative h-5 w-9 rounded-full transition-colors ${isAutoPlayEnabled ? "bg-[#8E4B56]" : "bg-[#D8C1BC]"}`}
-                >
-                  <span
-                    className={`absolute top-0.5 size-4 rounded-full bg-white shadow-sm transition-transform ${isAutoPlayEnabled ? "translate-x-[18px]" : "translate-x-0.5"}`}
-                  />
-                </span>
-              </button>
+              <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-[#5D3D39]">
+                Animação automática
+                <Switch checked={isAutoPlayEnabled} onCheckedChange={setIsAutoPlayEnabled} />
+              </label>
             </div>
             {isRemote ? (
               <div className="mt-1 text-xs text-[#7E5F59]">
@@ -377,9 +382,9 @@ function DrawnImages({
                   type="button"
                   className="rounded-xl bg-[#5D3D39] px-4 py-2 text-sm font-medium text-white"
                   onClick={() => {
-                    setSelectedDrawingIndex((currentIndex) => (
-                      currentIndex + 1 >= drawingTargets.length ? 0 : currentIndex + 1
-                    ));
+                    const nextIndex = (selectedDrawingIndex + 1) % drawingTargets.length;
+                    setSelectedDrawingIndex(nextIndex);
+                    animateCameraToPoint(drawingTargets[nextIndex].point);
                   }}
                 >
                   Flor atualizada anterior
@@ -447,13 +452,6 @@ function DrawnImages({
             >
               {isDebugOpen ? <X className="size-4" /> : <Plus className="size-4" />}
             </button>
-            <button
-              type="button"
-              className="rounded-xl bg-white/85 px-4 py-3 text-sm font-medium text-[#5D3D39] shadow-sm backdrop-blur-sm"
-              onClick={onBack}
-            >
-              Voltar
-            </button>
           </div>
         </div>
       </div>
@@ -462,12 +460,17 @@ function DrawnImages({
         ref={viewportRef}
         className="absolute inset-0 overflow-hidden bg-[#F1E7E4]"
       >
+        {/* The background fills the viewport independently of the tree camera. */}
+        <TreeBackground />
         <div
-          className="absolute left-0 top-0 will-change-transform"
+          data-tree-camera
+          className="absolute left-0 top-0 z-10 will-change-transform"
           style={{
             transform: `translate3d(${translateX}px, ${translateY}px, 0)`,
             transformOrigin: "0 0",
-            transition: `transform ${transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1), width ${transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1), height ${transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1)`,
+            transition: isAutoPlayEnabled
+              ? `transform ${transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1), width ${transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1), height ${transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1)`
+              : "none",
             width: `${scaledFrameWidth}px`,
             height: `${scaledFrameHeight}px`,
           }}
