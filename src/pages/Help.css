@@ -1,0 +1,32 @@
+.help-page { min-height: 100dvh; background: #f7f0ee; color: #5d3d39; padding: clamp(28px, 6vw, 80px) 20px; }
+.help-article { max-width: 74ch; margin-inline: auto; font-size: 1rem; line-height: 1.75; overflow-wrap: anywhere; }
+.help-header { padding-bottom: 32px; }
+.help-eyebrow { color: #8e4b56; font-size: .8rem; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; }
+.help-article h1 { margin: 12px 0 20px; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.12; font-weight: 800; letter-spacing: -.04em; text-wrap: balance; }
+.help-header > p:last-child { color: #765b56; font-size: 1.125rem; line-height: 1.65; }
+.help-contents { border-block: 1px solid #dac5c0; padding-block: 24px; }
+.help-contents ol { margin-bottom: 0; }
+.help-article section { padding-top: 44px; scroll-margin-top: 24px; }
+.help-article h2 { margin: 0 0 20px; font-size: clamp(1.4rem, 3vw, 1.75rem); line-height: 1.3; font-weight: 800; letter-spacing: -.025em; }
+.help-article h3 { margin: 28px 0 12px; font-size: 1.125rem; line-height: 1.4; font-weight: 800; }
+.help-article p { margin-block: 0 18px; }
+.help-article ul, .help-article ol { padding-left: 1.5em; margin-block: 12px 24px; }
+.help-article ul { list-style: disc; }
+.help-article ol { list-style: decimal; }
+.help-article li { padding-left: .25em; margin-block: 8px; }
+.help-article li::marker { color: #8e4b56; font-weight: 700; }
+.help-article a { color: #863e50; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.help-article a:hover { color: #592838; text-decoration-thickness: 2px; }
+.help-article a:focus-visible, .help-article video:focus-visible { outline: 3px solid #8e4b56; outline-offset: 4px; border-radius: 3px; }
+.help-note { padding: 20px 24px; border-left: 3px solid #b55e75; background: #fffaf8; border-radius: 0 12px 12px 0; margin-block: 24px; }
+.help-article figure { margin: 24px 0; }
+.help-article img { display: block; max-width: 100%; height: auto; border-radius: 10px; }
+.help-article figcaption { margin-top: 10px; color: #765b56; font-size: .875rem; line-height: 1.6; }
+.help-video video { display: block; width: 100%; max-height: 70vh; background: #241a1d; border-radius: 12px; }
+.help-examples { display: grid; gap: 20px; }
+.help-examples figure { margin: 0; }
+.help-examples { margin-block: 24px; }
+.help-test-active { border: 2px solid #b94b55; }
+.help-test-inactive { border: 2px solid #428265; }
+.help-footer { border-top: 1px solid #dac5c0; padding-top: 24px; margin-top: 44px; font-size: .875rem; }
+@media (min-width: 640px) { .help-examples { grid-template-columns: 1fr 1fr; align-items: start; } }

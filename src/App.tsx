@@ -9,8 +9,11 @@ import QuestionnairePage from "./pages/Questionnaire";
 import SavedDrawingsPage from "./pages/SavedDrawings";
 // @ts-expect-error JSX page module is consumed by the Vite app at runtime.
 import AdminPage from "./pages/Admin";
+// @ts-expect-error JSX page module is consumed by the Vite app at runtime.
+import HelpPage from "./pages/Help";
 
 function getPageFromPath(pathname: string) {
+  if (pathname === "/help" || pathname === "/help/") return "help";
   if (pathname === "/admin" || pathname === "/admin/") return "admin";
   if (pathname === "/tree") {
     return "tree-camera";
@@ -24,13 +27,13 @@ function getPageFromPath(pathname: string) {
 }
 
 function App() {
+  const [currentPage, setCurrentPage] = React.useState(() => getPageFromPath(window.location.pathname));
   const { clearDrawings, drawings, removeDrawing, saveDrawing } = useSavedFlowerDrawings();
   const treeApiUrl = import.meta.env.VITE_TREE_API_URL?.trim() ?? "";
   const remoteTree = useTreeDrawings({
-    enabled: Boolean(treeApiUrl),
+    enabled: Boolean(treeApiUrl) && currentPage !== "help",
     url: treeApiUrl,
   });
-  const [currentPage, setCurrentPage] = React.useState(() => getPageFromPath(window.location.pathname));
   const treeFlowers = React.useMemo(() => {
     // The online tree is authoritative, including removals made on another device.
     return [...(treeApiUrl ? remoteTree.drawings : drawings)].sort((left, right) => (
@@ -59,7 +62,9 @@ function App() {
 
   return (
     <>
-      {currentPage === "admin" ? (
+      {currentPage === "help" ? (
+        <HelpPage />
+      ) : currentPage === "admin" ? (
         <AdminPage
           drawings={treeFlowers}
           error={treeApiUrl ? remoteTree.error : null}
