@@ -1,0 +1,62 @@
+.sponsor-panel {
+  position: absolute;
+  z-index: 15;
+  inline-size: 51.5%;
+  container-type: inline-size;
+  background: #fff;
+  pointer-events: none;
+}
+
+.sponsor-panel__content {
+  display: flex;
+  aspect-ratio: 2.84;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5cqw;
+  padding: 6cqw 10cqw;
+}
+
+.sponsor-panel__label {
+  color: #999;
+  font-size: 5.5cqw;
+  line-height: 1.2;
+}
+
+.sponsor-panel__logo {
+  display: block;
+  inline-size: 78%;
+  block-size: auto;
+  filter: grayscale(1) brightness(0);
+}
+
+.sponsor-panel--bottom,
+.sponsor-panel--top {
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+}
+
+.sponsor-panel--bottom {
+  inset-block-end: 0;
+  border-radius: 12% 12% 0 0 / 34% 34% 0 0;
+  padding-block-end: env(safe-area-inset-bottom, 0px);
+}
+
+.sponsor-panel--top {
+  inset-block-start: 0;
+  border-radius: 0 0 12% 12% / 0 0 34% 34%;
+  padding-block-start: env(safe-area-inset-top, 0px);
+}
+
+.sponsor-panel--tree {
+  inset-inline-end: 0;
+  inset-block-end: 0;
+  inline-size: 25%;
+  border-start-start-radius: 12% 34%;
+  padding-block-end: env(safe-area-inset-bottom, 0px);
+  padding-inline-end: env(safe-area-inset-right, 0px);
+}
+
+@media (orientation: portrait) {
+  .sponsor-panel--tree { inline-size: 51.5%; }
+}

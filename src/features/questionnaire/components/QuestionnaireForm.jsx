@@ -44,7 +44,7 @@ import { getRandomFlowerVariantId } from "@/features/drawings/lib/flowerVariants
 import { useQuestionnaireForm } from "@/features/questionnaire/hooks/useQuestionnaireForm";
 import { playQuestionnaireSound } from "@/lib/questionnaire-audio";
 import fase1Rive from "@/assets/Fase1.riv?url";
-import novartisLogo from "@/assets/novartis-logo.png";
+import { SponsorPanel } from "@/components/ui/sponsor-panel";
 
 function SquircleFrame({ children, className = "" }) {
   return (
@@ -248,12 +248,12 @@ export function QuestionnaireForm({
     <TabletStage>
       <div
         ref={drawerPortalRef}
-        className="relative flex h-full w-full flex-col items-center justify-end gap-6 overflow-hidden bg-[#F7F0EE] px-6 pt-6 pb-[max(24px,env(safe-area-inset-bottom))] [transform:translateZ(0)]"
+        className="relative flex h-full w-full flex-col items-center justify-end gap-6 overflow-hidden bg-[#F7F0EE] px-6 pt-6 pb-[max(8%,env(safe-area-inset-bottom))] [transform:translateZ(0)]"
       >
         {element}
 
         {hasStarted && currentItem === "flower_text" ? (
-          <div className="pointer-events-none absolute inset-x-6 top-[8%] bottom-[31%] z-[5] flex items-center justify-center sm:inset-x-10 sm:top-[7%] sm:bottom-[30%]">
+          <div className="pointer-events-none absolute inset-x-6 top-[14%] bottom-[31%] z-[5] flex items-center justify-center sm:inset-x-10 sm:bottom-[30%]">
             <FlowerTextPreview
               flower={{
                 flowerText,
@@ -463,22 +463,7 @@ export function QuestionnaireForm({
           ))}
         </Questionnaire>
 
-        <span
-          role="img"
-          aria-label="Patrocínio: Novartis"
-          className="pointer-events-none relative z-10 block aspect-[2363/354] w-36 max-w-full shrink-0"
-          style={{
-            backgroundColor: !hasStarted || currentItem === "flower_text" ? "#B45E71" : "#FBFAFA",
-            maskImage: `url("${novartisLogo}")`,
-            maskSize: "contain",
-            maskPosition: "center",
-            maskRepeat: "no-repeat",
-            WebkitMaskImage: `url("${novartisLogo}")`,
-            WebkitMaskSize: "contain",
-            WebkitMaskPosition: "center",
-            WebkitMaskRepeat: "no-repeat",
-          }}
-        />
+        <SponsorPanel placement={hasStarted ? "top" : "bottom"} />
 
         <Dialog open={isSuccessDialogOpen}>
           <DialogPopup

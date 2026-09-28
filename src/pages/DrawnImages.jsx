@@ -1,3 +1,4 @@
+import { SponsorPanel } from "@/components/ui/sponsor-panel";
 import frameVisibleImage from "@/assets/Frame Visible02.svg";
 import frameRefImage from "@/assets/Frame Ref02.svg";
 import * as React from "react";
@@ -507,6 +508,7 @@ function DrawnImages({
           ))}
         </div>
       </div>
+      <SponsorPanel placement="tree" />
     </div>
   );
 }
