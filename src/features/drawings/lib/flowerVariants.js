@@ -1,6 +1,6 @@
-import flower1Image from "@/assets/Flower 1.png";
-import flower2Image from "@/assets/Flower 2.png";
-import flower3Image from "@/assets/Flower 3.png";
+import flower1Image from "@/assets/Flower 1.webp";
+import flower2Image from "@/assets/Flower 2.webp";
+import flower3Image from "@/assets/Flower 3.webp";
 
 export const FLOWER_VARIANTS = [
   {
