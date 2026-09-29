@@ -78,6 +78,11 @@ function useQuestionnaireRiveBackground() {
   );
 
   return {
+    resetToStart: () => {
+      if (!rive || !viewModelInstance) return;
+      rive.reset({ stateMachines: "Fase01", autoplay: true });
+      rive.bindViewModelInstance(viewModelInstance);
+    },
     triggerAnterior,
     triggerProxima,
     isReady: Boolean(viewModelInstance),
@@ -94,11 +99,12 @@ export function QuestionnaireForm({
   onSubmissionComplete,
 }) {
   const { getAnswers, getInitialItem, items, questions } = useQuestionnaireForm();
-  const { element, isReady, triggerAnterior, triggerProxima } =
+  const { element, isReady, resetToStart, triggerAnterior, triggerProxima } =
     useQuestionnaireRiveBackground();
   const initialItem = getInitialItem();
   const previousProgressPercentRef = React.useRef(0);
   const [currentItem, setCurrentItem] = React.useState(initialItem);
+  const [formSession, setFormSession] = React.useState(0);
   const [invalidItemName, setInvalidItemName] = React.useState(null);
   const [hasStarted, setHasStarted] = React.useState(false);
   const [submissionStatus, setSubmissionStatus] = React.useState("idle");
@@ -109,6 +115,7 @@ export function QuestionnaireForm({
   const [activeGlossaryQuestionName, setActiveGlossaryQuestionName] = React.useState(null);
   const [flowerVariantId] = React.useState(() => getRandomFlowerVariantId());
   const drawerPortalRef = React.useRef(null);
+  const startButtonRef = React.useRef(null);
   const currentQuestionIndex = Math.max(
     questions.findIndex((question) => question.name === currentItem),
     0,
@@ -219,6 +226,25 @@ export function QuestionnaireForm({
     triggerProxima();
   }
 
+  function handleBackToStart() {
+    playQuestionnaireSound("delete");
+    resetToStart();
+    // Remount only the questionnaire to clear its internal answers and inputs.
+    // Keep the loaded Rive instance and page alive.
+    setFormSession((session) => session + 1);
+    setCurrentItem(initialItem);
+    setFlowerText("");
+    setSubmissionStatus("idle");
+    setSubmitError(null);
+    setIsSuccessDialogOpen(false);
+    setActiveGlossaryQuestionName(null);
+    setIsGlossaryDrawerOpen(false);
+    previousProgressPercentRef.current = 0;
+    setInvalidItemName(null);
+    setHasStarted(false);
+    window.requestAnimationFrame(() => startButtonRef.current?.focus());
+  }
+
   function handleGlossaryDrawerOpenChange(nextOpen) {
     setIsGlossaryDrawerOpen(nextOpen);
   }
@@ -267,6 +293,7 @@ export function QuestionnaireForm({
 
         {!hasStarted ? (
           <button
+            ref={startButtonRef}
             type="button"
             className="absolute inset-0 z-20 cursor-pointer bg-transparent"
             onClick={handleStartExperience}
@@ -276,6 +303,8 @@ export function QuestionnaireForm({
         ) : null}
 
         <Questionnaire
+          key={formSession}
+          inert={!hasStarted}
           className={`relative max-h-[82%] min-h-0 w-full max-w-xl shrink-0 gap-6 overflow-y-auto overscroll-contain rounded-t-[32px] transition-opacity duration-300 ${hasStarted ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
           item={currentItem}
           items={items}
@@ -401,7 +430,18 @@ export function QuestionnaireForm({
                   </div>
 
                   <QuestionnaireActions className="flex gap-3">
-                    {question.name !== "flower_text" ? (
+                    {question.name === initialItem ? (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="xl"
+                        className="flex-1 justify-center"
+                        onClick={handleBackToStart}
+                      >
+                        <ChevronLeft />
+                        Voltar
+                      </Button>
+                    ) : question.name !== "flower_text" ? (
                       <QuestionnairePrevious
                         className="flex-1 justify-center"
                         size="xl"
