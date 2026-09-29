@@ -325,18 +325,18 @@ export function QuestionnaireForm({
               >
                 {question.type === "text" ? (
                   <div className="px-4 pt-4 sm:px-5 sm:pt-5">
-                    <label className="flex flex-col gap-2 text-sm font-medium text-[#5D3D39]">
+                    <label className="relative flex flex-col gap-2 text-sm font-medium text-[#5D3D39]">
                       <QuestionnaireInput
                         id="flower-text"
-                        maxLength={40}
+                        maxLength={80}
                         value={flowerText}
-                        aria-describedby="flower-text-error"
+                        aria-describedby="flower-text-count flower-text-error"
                         aria-label="Sua mensagem"
                         aria-invalid={invalidItemName === question.name}
                         autoComplete="off"
                         render={<textarea rows={3} />}
                         onChange={(event) => {
-                          setFlowerText(event.target.value.toLowerCase());
+                          setFlowerText(event.target.value.toLowerCase().slice(0, 80));
                           setInvalidItemName(null);
                           setSubmitError(null);
 
@@ -344,9 +344,15 @@ export function QuestionnaireForm({
                             setSubmissionStatus("idle");
                           }
                         }}
-                        className="h-auto min-h-20 w-full resize-none rounded-xl border border-[#D8C1BC] bg-white px-4 py-3 text-base text-[#5D3D39] outline-none placeholder:text-[#9E817C] focus-visible:border-[#8E4B56] focus-visible:ring-2 focus-visible:ring-[#8E4B56]/30"
+                        className="h-auto min-h-20 w-full resize-none rounded-xl border border-[#D8C1BC] bg-white px-4 pt-3 pb-9 text-base text-[#5D3D39] outline-none placeholder:text-[#9E817C] focus-visible:border-[#8E4B56] focus-visible:ring-2 focus-visible:ring-[#8E4B56]/30"
                         placeholder="Ex.: Esperança e cuidado"
                       />
+                      <span
+                        id="flower-text-count"
+                        className="pointer-events-none absolute right-4 bottom-3 text-xs font-normal text-[#7B5A56] tabular-nums"
+                      >
+                        {flowerText.length}/80
+                      </span>
                     </label>
                   </div>
                 ) : null}

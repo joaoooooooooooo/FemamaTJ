@@ -5,7 +5,7 @@ export function FlowerTextPreview({
   className = "",
   largeTextWordLimit = 2,
   maxFontSize = 14,
-  minFontSize = 6,
+  minFontSize = 9.5,
   unstyled = false,
 }) {
   const flowerImage = getFlowerVariantById(flower.flowerVariantId).imageSrc;
@@ -14,7 +14,7 @@ export function FlowerTextPreview({
   const wordCount = trimmedText ? trimmedText.split(/\s+/).length : 0;
   const lowerSize = Math.min(minFontSize, maxFontSize);
   const upperSize = Math.max(minFontSize, maxFontSize);
-  const characterDensity = Math.min(1, Math.max(0, (trimmedText.length - 10) / 30));
+  const characterDensity = Math.min(1, Math.max(0, (trimmedText.length - 10) / 70));
   const wordDensity = Math.min(
     1,
     Math.max(0, (wordCount - largeTextWordLimit) / Math.max(1, 8 - largeTextWordLimit)),

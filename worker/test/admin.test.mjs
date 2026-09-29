@@ -102,6 +102,17 @@ test("admin flower operations against isolated Durable Object storage", async (t
     await pending;
     assert.equal((await fetchAllTreeDrawings("http://admin.test", undefined, 83)).drawings[0].id, "after-live-reset");
   });
+  await t.test("preserves 80-character messages and caps longer webhook input", async () => {
+    for (const length of [80, 95]) {
+      const id = `message-${length}`;
+      await fetchWorker("/webhook/forminit", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ event: "form.submitted", id, data: { flower_text: "a".repeat(length) } }),
+      });
+      const result = await fetchAllTreeDrawings("http://admin.test");
+      assert.equal(result.drawings.find((flower) => flower.id === id).flowerText, "a".repeat(80));
+    }
+  });
   await t.test("failed delete rejects instead of reporting success", async () => {
     globalThis.fetch = async () => Response.json({ success: false }, { status: 500 });
     await assert.rejects(deleteTreeDrawings("http://admin.test", "after-reset"));

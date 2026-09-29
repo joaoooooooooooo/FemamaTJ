@@ -76,7 +76,7 @@ function createStressTestDrawings() {
     const flowerText = Array.from(
       { length: wordCount },
       () => STRESS_TEST_WORDS[getRandomIndex(STRESS_TEST_WORDS.length)],
-    ).join(" ").slice(0, 40).trim();
+    ).join(" ").slice(0, 80).trim();
 
     return {
       createdAt: new Date(Date.now() - (index * 1000)).toISOString(),
@@ -101,6 +101,11 @@ function DrawnImages({
   const viewportRef = React.useRef(null);
   const animationFrameRef = React.useRef(0);
   const lastAutoFocusedDrawingIdRef = React.useRef(null);
+  const knownFlowersRef = React.useRef(null);
+  const newestFlowerTimeRef = React.useRef(0);
+  const cameraBeforeSpotlightRef = React.useRef(null);
+  const [spotlightQueue, setSpotlightQueue] = React.useState([]);
+  const [reducedMotion, setReducedMotion] = React.useState(false);
   const [viewportSize, setViewportSize] = React.useState({ width: 0, height: 0 });
   const [camera, setCamera] = React.useState(INITIAL_CAMERA);
   const [transitionDurationMs, setTransitionDurationMs] = React.useState(2800);
@@ -108,7 +113,7 @@ function DrawnImages({
   const [isDebugOpen, setIsDebugOpen] = React.useState(false);
   const [isAutoPlayEnabled, setIsAutoPlayEnabled] = React.useState(true);
   const [stressTestDrawings, setStressTestDrawings] = React.useState([]);
-  const [minFlowerFontSize, setMinFlowerFontSize] = React.useState(6);
+  const [minFlowerFontSize, setMinFlowerFontSize] = React.useState(9.5);
   const [maxFlowerFontSize, setMaxFlowerFontSize] = React.useState(14);
   const [largeTextWordLimit, setLargeTextWordLimit] = React.useState(2);
   const visibleDrawings = React.useMemo(
@@ -125,7 +130,70 @@ function DrawnImages({
     [visibleDrawings],
   );
 
+  React.useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReducedMotion(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  React.useEffect(() => {
+    if (isLoading) return;
+    const ids = new Set(drawings.map((flower) => flower.id));
+    if (knownFlowersRef.current && !stressTestDrawings.length) {
+      const arrivals = drawings.filter((flower) =>
+        !knownFlowersRef.current.has(flower.id)
+        && Date.parse(flower.createdAt) >= newestFlowerTimeRef.current,
+      ).slice().reverse();
+      setSpotlightQueue((queue) => [...new Set([
+        ...queue.filter((id) => ids.has(id)), ...arrivals.map((flower) => flower.id),
+      ])]);
+    }
+    knownFlowersRef.current = ids;
+    newestFlowerTimeRef.current = Math.max(newestFlowerTimeRef.current,
+      ...drawings.map((flower) => Date.parse(flower.createdAt) || 0));
+  }, [drawings, isLoading, stressTestDrawings.length]);
+
+  const spotlightTarget = drawingTargets.find((target) => target.drawing.id === spotlightQueue[0]);
+  const spotlightId = spotlightTarget?.drawing.id;
+  const spotlightX = spotlightTarget?.point.x;
+  const spotlightY = spotlightTarget?.point.y;
+
+  React.useEffect(() => {
+    if (spotlightQueue.length && !spotlightId) {
+      setSpotlightQueue((queue) => queue.slice(1));
+    }
+  }, [spotlightQueue, spotlightId]);
+
+  React.useEffect(() => {
+    if (!spotlightId) return;
+    const timer = window.setTimeout(() => setSpotlightQueue((queue) => queue.slice(1)),
+      4000 + (reducedMotion ? 0 : 700));
+    return () => window.clearTimeout(timer);
+  }, [spotlightId, reducedMotion]);
+
+  React.useEffect(() => {
+    if (!spotlightId) {
+      if (cameraBeforeSpotlightRef.current) {
+        if (!isAutoPlayEnabled) setCamera(cameraBeforeSpotlightRef.current);
+        cameraBeforeSpotlightRef.current = null;
+      }
+      return;
+    }
+    window.cancelAnimationFrame(animationFrameRef.current);
+    setCamera((current) => {
+      cameraBeforeSpotlightRef.current ??= current;
+      return { ...current,
+        x: spotlightX / FRAME_VIEWBOX.width,
+        y: spotlightY / FRAME_VIEWBOX.height,
+        scale: Math.max(current.scale, 1.45),
+      };
+    });
+  }, [spotlightId, spotlightX, spotlightY, isAutoPlayEnabled]);
+
   function toggleStressTest() {
+    setSpotlightQueue([]);
     setSelectedDrawingIndex(0);
 
     if (stressTestDrawings.length) {
@@ -203,16 +271,16 @@ function DrawnImages({
   const selectedTargetY = selectedTarget?.point.y;
 
   React.useEffect(() => {
-    if (!isAutoPlayEnabled || selectedTargetX === undefined || selectedTargetY === undefined) {
+    if (spotlightId || !isAutoPlayEnabled || selectedTargetX === undefined || selectedTargetY === undefined) {
       return;
     }
 
     animateCameraToPoint({ x: selectedTargetX, y: selectedTargetY });
     return () => window.cancelAnimationFrame(animationFrameRef.current);
-  }, [animateCameraToPoint, isAutoPlayEnabled, selectedTargetId, selectedTargetX, selectedTargetY]);
+  }, [animateCameraToPoint, spotlightId, isAutoPlayEnabled, selectedTargetId, selectedTargetX, selectedTargetY]);
 
   React.useEffect(() => {
-    if (!isAutoPlayEnabled || drawingTargets.length < 2) {
+    if (spotlightId || !isAutoPlayEnabled || drawingTargets.length < 2) {
       return undefined;
     }
 
@@ -223,7 +291,7 @@ function DrawnImages({
     }, transitionDurationMs + AUTO_PLAY_PAUSE_MS);
 
     return () => window.clearTimeout(timeoutId);
-  }, [drawingTargets.length, isAutoPlayEnabled, selectedDrawingIndex, transitionDurationMs]);
+  }, [spotlightId, drawingTargets.length, isAutoPlayEnabled, selectedDrawingIndex, transitionDurationMs]);
 
   const baseScale = Math.min(
     viewportSize.width / FRAME_VIEWBOX.width || 0,
@@ -235,6 +303,16 @@ function DrawnImages({
     (viewportSize.width / 2) - (camera.x * scaledFrameWidth);
   const translateY =
     (viewportSize.height / 2) - (camera.y * scaledFrameHeight);
+
+  const cameraStyle = {
+            transform: `translate3d(${translateX}px, ${translateY}px, 0)`,
+            transformOrigin: "0 0",
+            transition: !reducedMotion && (isAutoPlayEnabled || spotlightId)
+              ? `transform ${spotlightId ? 700 : transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1), width ${spotlightId ? 700 : transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1), height ${spotlightId ? 700 : transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1)`
+              : "none",
+            width: `${scaledFrameWidth}px`,
+            height: `${scaledFrameHeight}px`,
+  };
 
   return (
     <div className="relative h-dvh w-full overflow-hidden bg-[#F7F0EE]">
@@ -443,15 +521,7 @@ function DrawnImages({
         <div
           data-tree-camera
           className="absolute left-0 top-0 z-10 will-change-transform"
-          style={{
-            transform: `translate3d(${translateX}px, ${translateY}px, 0)`,
-            transformOrigin: "0 0",
-            transition: isAutoPlayEnabled
-              ? `transform ${transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1), width ${transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1), height ${transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1)`
-              : "none",
-            width: `${scaledFrameWidth}px`,
-            height: `${scaledFrameHeight}px`,
-          }}
+          style={cameraStyle}
         >
           <img
             src={frameVisibleImage}
@@ -484,6 +554,19 @@ function DrawnImages({
             </div>
           ))}
         </div>
+        {spotlightTarget ? (
+          <>
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-20"
+              style={{ background: "radial-gradient(ellipse at center, rgba(45,20,30,0.12), rgba(45,20,30,0.58))", backdropFilter: "blur(3px)", WebkitBackdropFilter: "blur(3px)" }} />
+            <div aria-hidden="true" className="pointer-events-none absolute left-0 top-0 z-[21]" style={cameraStyle}>
+              <div className="absolute drop-shadow-[0_0_22px_rgba(255,230,235,0.65)]"
+                style={getPointStyle(spotlightTarget.point, sizeMultiplier)}>
+                <FlowerTextPreview flower={spotlightTarget.drawing} largeTextWordLimit={largeTextWordLimit}
+                  maxFontSize={maxFlowerFontSize} minFontSize={minFlowerFontSize} unstyled className="h-full w-full" />
+              </div>
+            </div>
+          </>
+        ) : null}
       </div>
       <SponsorPanel placement="tree" />
     </div>

@@ -142,7 +142,7 @@ async function verifyForminitWebhook(rawBody: ArrayBuffer, headers: Headers, sec
 function normalizeWebhookSubmission(payload: Record<string, unknown>) {
   const data = (payload.data ?? {}) as Record<string, unknown>;
   const flowerVariantId = getTextValue(data.flower_variant_id) ?? "flower-1";
-  const flowerText = (getTextValue(data.flower_text) ?? "").trim().slice(0, 40);
+  const flowerText = (getTextValue(data.flower_text) ?? "").trim().slice(0, 80);
   const debugTreeValue =
     getTextValue(data.debug_tree_value)
     ?? getTextValue((data.sender as Record<string, unknown> | undefined)?.userId)
