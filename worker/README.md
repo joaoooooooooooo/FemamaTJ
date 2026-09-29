@@ -17,10 +17,10 @@ After deploy, add the Worker URL to the frontend:
 VITE_TREE_API_URL="https://your-worker.your-subdomain.workers.dev"
 ```
 
-The tree page takes an initial snapshot of the latest 61 flowers:
+The tree page takes an initial snapshot of the latest 83 flowers (one per marker in `Frame Ref02.svg`):
 
 ```text
-GET /tree?page=1&size=61
+GET /tree?page=1&size=83
 ```
 
 It connects to `/tree/live` using WebSockets. After a verified Forminit webhook

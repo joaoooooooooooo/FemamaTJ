@@ -1,4 +1,5 @@
 import * as React from "react";
+import { TREE_FLOWER_LIMIT } from "@/features/drawings/lib/tree-layout";
 import { Agentation } from "agentation";
 import { useSavedFlowerDrawings, useTreeDrawings } from "@/features/drawings";
 // @ts-expect-error JSX page module is consumed by the Vite app at runtime.
@@ -33,7 +34,7 @@ function App() {
   const remoteTree = useTreeDrawings({
     enabled: Boolean(treeApiUrl) && ["tree-camera", "admin", "saved-drawings"].includes(currentPage),
     url: treeApiUrl,
-    limit: currentPage === "tree-camera" ? 61 : null,
+    limit: currentPage === "tree-camera" ? TREE_FLOWER_LIMIT : null,
   });
   const treeFlowers = React.useMemo(() => {
     // The online tree is authoritative, including removals made on another device.

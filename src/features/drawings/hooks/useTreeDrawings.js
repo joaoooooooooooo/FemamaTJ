@@ -58,7 +58,7 @@ export function useTreeDrawings({ enabled = false, url = "", limit = null }) {
       return { error: "Não foi possível excluir as flores. Verifique a conexão e tente novamente." };
     } finally {
       isMutatingRef.current = false;
-      // Reconcile concurrent submissions and refill the 61st slot after removal.
+      // Reconcile concurrent submissions and refill the last visible slot after removal.
       void fetchDrawings();
     }
   }, [enabled, url, fetchDrawings]);

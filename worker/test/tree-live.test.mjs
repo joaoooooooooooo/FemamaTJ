@@ -52,9 +52,9 @@ test("live connection stops polling, detects dropped connections, resyncs, and c
 test("upserts deduplicate, order, cap the tree, and retain full admin history", () => {
   const flowers = Array.from({ length: 100 }, (_, i) => ({ id: String(i), createdAt: new Date(i * 1000).toISOString() }));
   const newest = { id: "new", createdAt: new Date(200000).toISOString(), flowerText: "amor" };
-  const tree = applyTreeUpsert(flowers, newest, 61);
-  assert.equal(tree.length, 61);
+  const tree = applyTreeUpsert(flowers, newest, 83);
+  assert.equal(tree.length, 83);
   assert.deepEqual(tree[0], newest);
-  assert.equal(applyTreeUpsert(tree, newest, 61).length, 61);
+  assert.equal(applyTreeUpsert(tree, newest, 83).length, 83);
   assert.equal(applyTreeUpsert(flowers, newest, null).length, 101);
 });

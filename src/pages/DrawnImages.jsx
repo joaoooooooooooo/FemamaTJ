@@ -7,6 +7,7 @@ import fase1Rive from "@/assets/Fase1.riv?url";
 import { Plus, X } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { FlowerTextPreview } from "@/features/drawings/components/FlowerTextPreview";
+import { DRAWING_POINTS } from "@/features/drawings/lib/tree-layout";
 import { FLOWER_VARIANTS } from "@/features/drawings/lib/flowerVariants";
 
 const TreeBackground = React.memo(function TreeBackground() {
@@ -29,30 +30,6 @@ const FRAME_VIEWBOX = {
   width: 3026,
   height: 2877,
 };
-
-const DRAWING_POINTS = [
-  { x: 1572.72, y: 155.98 }, { x: 1610.67, y: 309.5 }, { x: 1721.83, y: 169.598 },
-  { x: 1790.41, y: 288.926 }, { x: 1856.31, y: 136.246 }, { x: 2034.17, y: 67.4492 },
-  { x: 2136.5, y: 116.191 }, { x: 2066.95, y: 359.316 }, { x: 2037.73, y: 477.988 },
-  { x: 2164.89, y: 435.84 }, { x: 2268.61, y: 508.723 }, { x: 2291.95, y: 399.191 },
-  { x: 2390.24, y: 428.152 }, { x: 2484.43, y: 477.988 }, { x: 1903.02, y: 440.035 },
-  { x: 1871.57, y: 569.082 }, { x: 1755.2, y: 683.656 }, { x: 1631.34, y: 707.73 },
-  { x: 1724.83, y: 819.801 }, { x: 1973.05, y: 867.637 }, { x: 2114.28, y: 884.371 },
-  { x: 1968.51, y: 1010.59 }, { x: 2114.33, y: 1027.43 }, { x: 2648.98, y: 1068.72 },
-  { x: 2466.84, y: 1122.25 }, { x: 2606.84, y: 1185.32 }, { x: 2741.77, y: 1218.48 },
-  { x: 2864.98, y: 1195.15 }, { x: 2960.74, y: 1126.82 }, { x: 2499.79, y: 1251.68 },
-  { x: 2302.03, y: 1174.02 }, { x: 2203.21, y: 1300.93 }, { x: 2409.6, y: 1337.52 },
-  { x: 2514.56, y: 1459.76 }, { x: 2381.95, y: 1442.68 }, { x: 2268.66, y: 1426.01 },
-  { x: 2132.28, y: 1412.71 }, { x: 2095.45, y: 1296.76 }, { x: 2007.68, y: 1361.31 },
-  { x: 2007.71, y: 1137.58 }, { x: 1775.84, y: 1027.43 }, { x: 1790.47, y: 1172.53 },
-  { x: 1498.39, y: 1016.39 }, { x: 1453.87, y: 888.473 }, { x: 1369.48, y: 843.586 },
-  { x: 1373.66, y: 713.52 }, { x: 1256.74, y: 676.309 }, { x: 1135.9, y: 709.348 },
-  { x: 1044.39, y: 614.949 }, { x: 861.168, y: 584.879 }, { x: 978.941, y: 502.387 },
-  { x: 856.992, y: 451.02 }, { x: 701.996, y: 481.125 }, { x: 806.668, y: 332.887 },
-  { x: 939.531, y: 352.902 }, { x: 1043.37, y: 288.965 }, { x: 1174.98, y: 477.34 },
-  { x: 1307.63, y: 518.551 }, { x: 1700.29, y: 404.621 }, { x: 1632.75, y: 539.184 },
-  { x: 1503.33, y: 518.551 },
-];
 
 const BASE_SLOT_SIZE = 0.0395;
 const AUTO_PLAY_PAUSE_MS = 1500;
@@ -402,7 +379,7 @@ function DrawnImages({
                 className={`rounded-xl border px-4 py-2 text-sm font-medium ${stressTestDrawings.length ? "border-[#8E4B56] bg-[#8E4B56] text-white" : "border-[#D8C1BC] bg-white text-[#5D3D39]"}`}
                 onClick={toggleStressTest}
               >
-                {stressTestDrawings.length ? "Remover teste" : "Popular 40 flores"}
+                {stressTestDrawings.length ? "Remover teste" : `Popular ${DRAWING_POINTS.length} flores`}
               </button>
               {isRemote ? (
                 <button
@@ -425,7 +402,7 @@ function DrawnImages({
 
             {stressTestDrawings.length ? (
               <div className="mt-3 text-xs font-medium text-[#8E4B56]">
-                Stress test ativo: 40 flores locais com textos aleatorios.
+                Stress test ativo: {stressTestDrawings.length} flores locais com textos aleatorios.
               </div>
             ) : null}
 

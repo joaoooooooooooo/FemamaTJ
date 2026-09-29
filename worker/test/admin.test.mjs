@@ -34,9 +34,9 @@ test("admin flower operations against isolated Durable Object storage", async (t
     const result = await fetchAllTreeDrawings("http://admin.test");
     assert.equal(result.drawings.length, 135);
     assert.equal(new Set(result.drawings.map((flower) => flower.id)).size, 135);
-    const limited = await fetchAllTreeDrawings("http://admin.test", undefined, 61);
-    assert.equal(limited.drawings.length, 61);
-    assert.deepEqual(limited.drawings, result.drawings.slice(0, 61));
+    const limited = await fetchAllTreeDrawings("http://admin.test", undefined, 83);
+    assert.equal(limited.drawings.length, 83);
+    assert.deepEqual(limited.drawings, result.drawings.slice(0, 83));
   });
   await t.test("deletes exactly one flower and persists after refetch", async () => {
     await deleteTreeDrawings("http://admin.test", "flower-42");
@@ -100,7 +100,7 @@ test("admin flower operations against isolated Durable Object storage", async (t
     pending = receiveBoth();
     await ingest("after-live-reset");
     await pending;
-    assert.equal((await fetchAllTreeDrawings("http://admin.test", undefined, 61)).drawings[0].id, "after-live-reset");
+    assert.equal((await fetchAllTreeDrawings("http://admin.test", undefined, 83)).drawings[0].id, "after-live-reset");
   });
   await t.test("failed delete rejects instead of reporting success", async () => {
     globalThis.fetch = async () => Response.json({ success: false }, { status: 500 });
