@@ -49,7 +49,7 @@ import { SponsorPanel } from "@/components/ui/sponsor-panel";
 function SquircleFrame({ children, className = "" }) {
   return (
     <div
-      className={`relative flex flex-col rounded-[32px] bg-[#FBFAFA] p-4 shadow-[0_24px_60px_rgba(180,94,113,0.12)] group-data-active/questionnaire-item:[animation:questionnaire-frame-in_320ms_cubic-bezier(0.2,0,0,1)] motion-reduce:group-data-active/questionnaire-item:[animation:none] ${className}`}
+      className={`relative flex flex-col rounded-t-[32px] bg-[#FBFAFA] p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[0_24px_60px_rgba(180,94,113,0.12)] group-data-active/questionnaire-item:[animation:questionnaire-frame-in_320ms_cubic-bezier(0.2,0,0,1)] motion-reduce:group-data-active/questionnaire-item:[animation:none] ${className}`}
     >
       {children}
     </div>
@@ -248,7 +248,7 @@ export function QuestionnaireForm({
     <TabletStage>
       <div
         ref={drawerPortalRef}
-        className="relative flex h-full w-full flex-col items-center justify-end gap-6 overflow-hidden bg-[#F7F0EE] px-6 pt-6 pb-[max(8%,env(safe-area-inset-bottom))] [transform:translateZ(0)]"
+        className="relative flex h-full w-full flex-col items-center justify-end overflow-hidden bg-[#F7F0EE] px-4 pt-6 sm:px-6 [transform:translateZ(0)]"
       >
         {element}
 
@@ -276,7 +276,7 @@ export function QuestionnaireForm({
         ) : null}
 
         <Questionnaire
-          className={`relative w-full max-w-xl gap-6 transition-opacity duration-300 ${hasStarted ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
+          className={`relative max-h-[82%] min-h-0 w-full max-w-xl shrink-0 gap-6 overflow-y-auto overscroll-contain rounded-t-[32px] transition-opacity duration-300 ${hasStarted ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
           item={currentItem}
           items={items}
           onItemChange={(itemName) => {
