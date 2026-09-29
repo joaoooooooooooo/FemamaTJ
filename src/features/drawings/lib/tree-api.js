@@ -1,9 +1,9 @@
-export async function fetchAllTreeDrawings(url, signal) {
+export async function fetchAllTreeDrawings(url, signal, limit = null) {
   const drawings = new Map();
   let latestDrawingId = null;
   let received = 0;
   for (let page = 1; ; page += 1) {
-    const response = await fetch(`${url.replace(/\/$/, "")}/tree?page=${page}&size=100`, {
+    const response = await fetch(`${url.replace(/\/$/, "")}/tree?page=${page}&size=${limit ?? 100}`, {
       headers: { Accept: "application/json" }, cache: "no-store", signal,
     });
     const result = await response.json();
@@ -19,7 +19,7 @@ export async function fetchAllTreeDrawings(url, signal) {
       });
     }
     received += result.drawings.length;
-    if (!result.drawings.length || received >= result.total || result.drawings.length < 100) break;
+    if (limit || !result.drawings.length || received >= (result.pagination?.total ?? result.total) || result.drawings.length < 100) break;
   }
   return { drawings: [...drawings.values()], latestDrawingId };
 }

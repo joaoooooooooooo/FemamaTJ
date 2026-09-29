@@ -31,8 +31,9 @@ function App() {
   const { clearDrawings, drawings, removeDrawing, saveDrawing } = useSavedFlowerDrawings();
   const treeApiUrl = import.meta.env.VITE_TREE_API_URL?.trim() ?? "";
   const remoteTree = useTreeDrawings({
-    enabled: Boolean(treeApiUrl) && currentPage !== "help",
+    enabled: Boolean(treeApiUrl) && ["tree-camera", "admin", "saved-drawings"].includes(currentPage),
     url: treeApiUrl,
+    limit: currentPage === "tree-camera" ? 61 : null,
   });
   const treeFlowers = React.useMemo(() => {
     // The online tree is authoritative, including removals made on another device.

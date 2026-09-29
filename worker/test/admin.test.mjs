@@ -34,6 +34,9 @@ test("admin flower operations against isolated Durable Object storage", async (t
     const result = await fetchAllTreeDrawings("http://admin.test");
     assert.equal(result.drawings.length, 135);
     assert.equal(new Set(result.drawings.map((flower) => flower.id)).size, 135);
+    const limited = await fetchAllTreeDrawings("http://admin.test", undefined, 61);
+    assert.equal(limited.drawings.length, 61);
+    assert.deepEqual(limited.drawings, result.drawings.slice(0, 61));
   });
   await t.test("deletes exactly one flower and persists after refetch", async () => {
     await deleteTreeDrawings("http://admin.test", "flower-42");
@@ -59,6 +62,45 @@ test("admin flower operations against isolated Durable Object storage", async (t
     assert.deepEqual(empty, { drawings: [], latestDrawingId: null });
     await ingest("after-reset");
     assert.equal((await fetchAllTreeDrawings("http://admin.test")).drawings[0].id, "after-reset");
+  });
+  await t.test("two independent displays receive submissions, deletions, resets, and heartbeats", async () => {
+    assert.equal((await fetchWorker("/tree/live")).status, 426);
+    const sockets = [];
+    for (let index = 0; index < 2; index += 1) {
+      const response = await fetchWorker("/tree/live", { headers: { Upgrade: "websocket" } });
+      assert.equal(response.status, 101);
+      response.webSocket.accept();
+      sockets.push(response.webSocket);
+    }
+    t.after(() => sockets.forEach((socket) => socket.close()));
+    const next = (socket) => new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error("No live update received")), 5000);
+      socket.addEventListener("message", ({ data }) => {
+        clearTimeout(timeout);
+        resolve(data === "pong" ? data : JSON.parse(data));
+      }, { once: true });
+    });
+    const receiveBoth = () => Promise.all(sockets.map(next));
+    let pending = receiveBoth();
+    await ingest("live-flower");
+    for (const event of await pending) {
+      assert.equal(event.type, "upsert");
+      assert.equal(event.drawing.id, "live-flower");
+      assert.equal(event.drawing.flowerText, "Flor live-flower");
+    }
+    pending = receiveBoth();
+    await deleteTreeDrawings("http://admin.test", "live-flower");
+    for (const event of await pending) assert.deepEqual(event, { type: "remove", id: "live-flower" });
+    pending = receiveBoth();
+    await deleteTreeDrawings("http://admin.test");
+    for (const event of await pending) assert.deepEqual(event, { type: "clear" });
+    const pong = next(sockets[0]);
+    sockets[0].send("ping");
+    assert.equal(await pong, "pong");
+    pending = receiveBoth();
+    await ingest("after-live-reset");
+    await pending;
+    assert.equal((await fetchAllTreeDrawings("http://admin.test", undefined, 61)).drawings[0].id, "after-live-reset");
   });
   await t.test("failed delete rejects instead of reporting success", async () => {
     globalThis.fetch = async () => Response.json({ success: false }, { status: 500 });

@@ -57,6 +57,7 @@ export function useSavedFlowerDrawings(): {
 export function useTreeDrawings(input: {
   enabled?: boolean;
   url?: string;
+  limit?: number | null;
 }): {
   clear: () => Promise<{ error: string | null }>;
   remove: (id: string) => Promise<{ error: string | null }>;

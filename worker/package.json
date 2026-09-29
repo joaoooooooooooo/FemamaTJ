@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "test": "node --test test/admin.test.mjs",
+    "test": "node --test test/*.test.mjs",
     "deploy": "wrangler deploy",
     "dev": "wrangler dev --port 8791"
   },

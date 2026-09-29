@@ -1,8 +1,7 @@
 import { DurableObject } from "cloudflare:workers";
 
-export interface Env {
+export interface Env extends Cloudflare.Env {
   FORMINIT_WEBHOOK_SECRET?: string;
-  TREE_STORE: DurableObjectNamespace;
 }
 
 type StoredTreeFlower = {
@@ -167,8 +166,48 @@ async function getTreeStoreStub(env: Env) {
 }
 
 export class TreeStore extends DurableObject<Env> {
+  constructor(ctx: DurableObjectState, env: Env) {
+    super(ctx, env);
+    // Heartbeats are answered without waking the object or reading storage.
+    this.ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair("ping", "pong"));
+  }
+
+  private broadcast(event: Record<string, unknown>) {
+    const message = JSON.stringify(event);
+    for (const socket of this.ctx.getWebSockets()) {
+      try {
+        socket.send(message);
+      } catch {
+        // A disconnected display must never fail a saved submission.
+        try { socket.close(1011, "Reconnect"); } catch { /* Already closed. */ }
+      }
+    }
+  }
+
+  webSocketMessage(socket: WebSocket) {
+    // Public connections are read-only; mutations use the existing HTTP routes.
+    socket.close(1008, "Read-only connection");
+  }
+
+  webSocketClose(socket: WebSocket, code: number, reason: string) {
+    socket.close(code, reason);
+  }
+
+  webSocketError(socket: WebSocket) {
+    socket.close(1011, "Reconnect");
+  }
+
   async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url);
+
+    if (request.method === "GET" && url.pathname === "/live") {
+      if (request.headers.get("Upgrade")?.toLowerCase() !== "websocket") {
+        return new Response("WebSocket required", { status: 426 });
+      }
+      const [client, server] = Object.values(new WebSocketPair());
+      this.ctx.acceptWebSocket(server);
+      return new Response(null, { status: 101, webSocket: client });
+    }
 
     if (request.method === "GET" && url.pathname === "/list") {
       const page = Math.max(1, Number(url.searchParams.get("page") ?? "1"));
@@ -191,6 +230,7 @@ export class TreeStore extends DurableObject<Env> {
     if (request.method === "POST" && url.pathname === "/ingest") {
       const drawing = await request.json() as StoredTreeFlower;
       await this.ctx.storage.put(`drawing:${drawing.id}`, drawing);
+      this.broadcast({ type: "upsert", drawing });
 
       return Response.json({ received: true, success: true });
     }
@@ -199,12 +239,14 @@ export class TreeStore extends DurableObject<Env> {
       const id = url.searchParams.get("id");
       if (!id) return Response.json({ success: false }, { status: 400 });
       await this.ctx.storage.delete(`drawing:${id}`);
+      this.broadcast({ type: "remove", id });
       return Response.json({ removed: true, success: true });
     }
 
     if (request.method === "DELETE" && url.pathname === "/clear") {
       // This object contains only the current tree; deleteAll also handles large resets.
       await this.ctx.storage.deleteAll();
+      this.broadcast({ type: "clear" });
 
       return Response.json({ cleared: true, success: true } satisfies TreeStoreClearResponse);
     }
@@ -220,6 +262,11 @@ export default {
 
     if (request.method === "OPTIONS") {
       return new Response(null, { headers });
+    }
+
+    if (url.pathname === "/tree/live" && request.method === "GET") {
+      const treeStore = await getTreeStoreStub(env);
+      return treeStore.fetch(new Request("https://tree-store/live", request));
     }
 
     if (url.pathname === "/") {
