@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/frame";
 import {
   Dialog,
+  DialogDescription,
   DialogHeader,
   DialogPopup,
   DialogTitle,
@@ -107,6 +108,7 @@ export function QuestionnaireForm({
   const [formSession, setFormSession] = React.useState(0);
   const [invalidItemName, setInvalidItemName] = React.useState(null);
   const [hasStarted, setHasStarted] = React.useState(false);
+  const [isEntryDialogOpen, setIsEntryDialogOpen] = React.useState(true);
   const [submissionStatus, setSubmissionStatus] = React.useState("idle");
   const [submitError, setSubmitError] = React.useState(null);
   const [flowerText, setFlowerText] = React.useState("");
@@ -217,9 +219,29 @@ export function QuestionnaireForm({
     await submitAnswers(getAnswers(formData));
   }
 
+  function handleEnter() {
+    try {
+      if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+    } catch {
+      // Fullscreen is optional; allow entry even if it fails.
+    }
+
+    setIsEntryDialogOpen(false);
+  }
+
   function handleStartExperience() {
     if (hasStarted || !isReady) {
       return;
+    }
+
+    try {
+      if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+    } catch {
+      // Fullscreen is optional; keep starting the questionnaire if it fails.
     }
 
     setHasStarted(true);
@@ -510,6 +532,27 @@ export function QuestionnaireForm({
         </Questionnaire>
 
         <SponsorPanel placement={hasStarted ? "top" : "bottom"} />
+
+        <Dialog open={isEntryDialogOpen} onOpenChange={setIsEntryDialogOpen}>
+          <DialogPopup
+            showCloseButton={false}
+            bottomStickOnMobile={false}
+            finalFocus={startButtonRef}
+            className="max-w-md rounded-[32px] border-[#D8C1BC] bg-[#FBFAFA]"
+          >
+            <DialogHeader className="gap-4 p-8 text-center sm:p-10">
+              <DialogTitle className="text-2xl leading-tight font-semibold text-[#5D3D39]">
+                Bem-vinda à pesquisa FEMAMA
+              </DialogTitle>
+              <DialogDescription className="text-base text-[#7B5A56]">
+                Toque em Entrar para abrir em tela cheia.
+              </DialogDescription>
+              <Button type="button" size="xl" onClick={handleEnter}>
+                Entrar
+              </Button>
+            </DialogHeader>
+          </DialogPopup>
+        </Dialog>
 
         <Dialog open={isSuccessDialogOpen}>
           <DialogPopup
