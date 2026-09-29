@@ -222,10 +222,13 @@ export function QuestionnaireForm({
   function handleEnter() {
     try {
       if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen().catch(() => {});
+        document.documentElement.requestFullscreen({ navigationUI: "hide" }).catch((error) => {
+          console.warn("Fullscreen request failed:", error);
+        });
       }
-    } catch {
+    } catch (error) {
       // Fullscreen is optional; allow entry even if it fails.
+      console.warn("Fullscreen request failed:", error);
     }
 
     setIsEntryDialogOpen(false);
@@ -238,10 +241,13 @@ export function QuestionnaireForm({
 
     try {
       if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen().catch(() => {});
+        document.documentElement.requestFullscreen({ navigationUI: "hide" }).catch((error) => {
+          console.warn("Fullscreen request failed:", error);
+        });
       }
-    } catch {
+    } catch (error) {
       // Fullscreen is optional; keep starting the questionnaire if it fails.
+      console.warn("Fullscreen request failed:", error);
     }
 
     setHasStarted(true);
