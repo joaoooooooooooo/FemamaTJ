@@ -1,4 +1,5 @@
 import * as React from "react";
+const AnalyticsPage = React.lazy(() => import("./pages/Analytics"));
 import { TREE_FLOWER_LIMIT } from "@/features/drawings/lib/tree-layout";
 import { Agentation } from "agentation";
 import { useSavedFlowerDrawings, useTreeDrawings } from "@/features/drawings";
@@ -14,6 +15,7 @@ import AdminPage from "./pages/Admin";
 import HelpPage from "./pages/Help";
 
 function getPageFromPath(pathname: string) {
+  if (pathname === "/resultados" || pathname === "/resultados/") return "analytics";
   if (pathname === "/help" || pathname === "/help/") return "help";
   if (pathname === "/admin" || pathname === "/admin/") return "admin";
   if (pathname === "/tree") {
@@ -64,7 +66,11 @@ function App() {
 
   return (
     <>
-      {currentPage === "help" ? (
+      {currentPage === "analytics" ? (
+        <React.Suspense fallback={<p role="status" className="p-8">Carregando resultados…</p>}>
+          <AnalyticsPage />
+        </React.Suspense>
+      ) : currentPage === "help" ? (
         <HelpPage />
       ) : currentPage === "admin" ? (
         <AdminPage

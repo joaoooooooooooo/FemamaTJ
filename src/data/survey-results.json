@@ -1,0 +1,1717 @@
+{
+    "days":  [
+                 {
+                     "count":  175,
+                     "label":  "2026-09-29"
+                 },
+                 {
+                     "count":  197,
+                     "label":  "2026-09-30"
+                 },
+                 {
+                     "count":  121,
+                     "label":  "2026-10-01"
+                 }
+             ],
+    "counts":  {
+                   "Perfil":  [
+                                  {
+                                      "count":  306,
+                                      "label":  "Profissional de saúde"
+                                  },
+                                  {
+                                      "count":  67,
+                                      "label":  "Paciente de câncer de mama"
+                                  },
+                                  {
+                                      "count":  51,
+                                      "label":  "Interessado no tema"
+                                  },
+                                  {
+                                      "count":  42,
+                                      "label":  "Representante de OSC"
+                                  },
+                                  {
+                                      "count":  17,
+                                      "label":  "Paciente de outro tipo de câncer"
+                                  },
+                                  {
+                                      "count":  10,
+                                      "label":  "Familiar ou cuidador de pessoa com câncer"
+                                  }
+                              ],
+                   "Idade":  [
+                                 {
+                                     "count":  134,
+                                     "label":  "Entre 18 e 30 anos"
+                                 },
+                                 {
+                                     "count":  133,
+                                     "label":  "Entre 40 e 50 anos"
+                                 },
+                                 {
+                                     "count":  107,
+                                     "label":  "Entre 31 e 40 anos"
+                                 },
+                                 {
+                                     "count":  78,
+                                     "label":  "Entre 50 e 60 anos"
+                                 },
+                                 {
+                                     "count":  41,
+                                     "label":  "\u003e60 anos"
+                                 }
+                             ],
+                   "Regiao":  [
+                                  {
+                                      "count":  367,
+                                      "label":  "Região Sudeste do Brasil"
+                                  },
+                                  {
+                                      "count":  58,
+                                      "label":  "Região Sul do Brasil"
+                                  },
+                                  {
+                                      "count":  36,
+                                      "label":  "Região Centro-Oeste do Brasil"
+                                  },
+                                  {
+                                      "count":  16,
+                                      "label":  "Região Nordeste do Brasil"
+                                  },
+                                  {
+                                      "count":  13,
+                                      "label":  "Região Norte do Brasil"
+                                  },
+                                  {
+                                      "count":  3,
+                                      "label":  "Exterior do Brasil"
+                                  }
+                              ],
+                   "Adjuvante neoadjuvante":  [
+                                                  {
+                                                      "count":  329,
+                                                      "label":  "Sim"
+                                                  },
+                                                  {
+                                                      "count":  164,
+                                                      "label":  "Não"
+                                                  }
+                                              ],
+                   "Recidiva":  [
+                                    {
+                                        "count":  452,
+                                        "label":  "Sim"
+                                    },
+                                    {
+                                        "count":  41,
+                                        "label":  "Não"
+                                    }
+                                ],
+                   "Metastase":  [
+                                     {
+                                         "count":  483,
+                                         "label":  "Sim"
+                                     },
+                                     {
+                                         "count":  10,
+                                         "label":  "Não"
+                                     }
+                                 ],
+                   "Tratamento previne":  [
+                                              {
+                                                  "count":  485,
+                                                  "label":  "Sim"
+                                              },
+                                              {
+                                                  "count":  8,
+                                                  "label":  "Não"
+                                              }
+                                          ],
+                   "Jornada unica":  [
+                                         {
+                                             "count":  488,
+                                             "label":  "Sim"
+                                         },
+                                         {
+                                             "count":  5,
+                                             "label":  "Não"
+                                         }
+                                     ],
+                   "Opcoes todos estagios":  [
+                                                 {
+                                                     "count":  482,
+                                                     "label":  "Sim"
+                                                 },
+                                                 {
+                                                     "count":  11,
+                                                     "label":  "Não"
+                                                 }
+                                             ],
+                   "Conhecer opcoes":  [
+                                           {
+                                               "count":  486,
+                                               "label":  "Sim"
+                                           },
+                                           {
+                                               "count":  7,
+                                               "label":  "Não"
+                                           }
+                                       ],
+                   "Flower text":  [
+                                       {
+                                           "count":  19,
+                                           "label":  "esperança"
+                                       },
+                                       {
+                                           "count":  12,
+                                           "label":  "amor"
+                                       },
+                                       {
+                                           "count":  11,
+                                           "label":  "fé"
+                                       },
+                                       {
+                                           "count":  9,
+                                           "label":  "Sem resposta"
+                                       },
+                                       {
+                                           "count":  8,
+                                           "label":  "fe"
+                                       },
+                                       {
+                                           "count":  6,
+                                           "label":  "coragem"
+                                       },
+                                       {
+                                           "count":  5,
+                                           "label":  "viva intensamente"
+                                       },
+                                       {
+                                           "count":  5,
+                                           "label":  "resiliencia"
+                                       },
+                                       {
+                                           "count":  5,
+                                           "label":  "cuidado"
+                                       },
+                                       {
+                                           "count":  4,
+                                           "label":  "resiliência"
+                                       },
+                                       {
+                                           "count":  4,
+                                           "label":  "autocuidado"
+                                       },
+                                       {
+                                           "count":  4,
+                                           "label":  "acolhimento"
+                                       },
+                                       {
+                                           "count":  3,
+                                           "label":  "cuide-se"
+                                       },
+                                       {
+                                           "count":  3,
+                                           "label":  "vida"
+                                       },
+                                       {
+                                           "count":  3,
+                                           "label":  "força"
+                                       },
+                                       {
+                                           "count":  3,
+                                           "label":  "permita-se"
+                                       },
+                                       {
+                                           "count":  3,
+                                           "label":  "e"
+                                       },
+                                       {
+                                           "count":  3,
+                                           "label":  "esperanca"
+                                       },
+                                       {
+                                           "count":  3,
+                                           "label":  "gratidão"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "obrigada"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "esuperação"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "fisio oncocomamor"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "cuidar é um ato de amor"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "cui"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "vc é  especial e tão  vivazzzz"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "acolhimento e empatia"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "qualidade de vida"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "seja forte e corajoso"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "tenha fé"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "nunca perca a esperança"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "superacao"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "amor e fé"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "coragem e fé"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "femama"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "gratidao"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "es"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "nunca deixe de acreditar!"
+                                       },
+                                       {
+                                           "count":  2,
+                                           "label":  "vamos juntos"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "gratidao e fe"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "vc"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "sabedoria e fe"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "viver é uma dádiva"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "a cura vem ...."
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "fé e autocuidado"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "socorro"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "beatriz pompeu"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "otimo trabakho"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "toda informacao e importsnte para o paciente esak"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "o amor, cura."
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "sentido de vida"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "coragem e esperança sempre"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "atenção"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "juntos pelos pacientes"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "ciencia e equidade"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "apoio"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "deve ae"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "vai dsd thd"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "ame-se sempre!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "la detecciontemprana es el mejor medicamento"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "empatia"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "rastreio"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "luz, equilíbrio e sabedoria"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "cuidado e acolhimento"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "amor e fe"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "b"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "em meio ao diagnóstico , há a vida."
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "sempre ha esperanca"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "informação e educação são a chave."
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "amor e esperança"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "ressignificar"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "existe vida pós câncer de mama"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "minha flor, apesar de toda ansiedade, medos, solidão,  quero te falar que se vc"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "prevenção é amor"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "ouvir"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "seja foda"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "viva o dia de hoje como se fosse o ultimo"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "acreditem"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "a humanização  no tratamento faz diferença"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "cuidar é amor"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "é preciso saber para viver"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "saudeeeeee"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "há sempre umcaminho bom"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "cuidado individual"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "cuide se"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "reabilitação"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "diagnostico precoce salva vidas"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "é importante se olhar com carinho"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "viver é extraordinário"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "fé e esperança"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "se cuide com amor"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "espr"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "conhecimento e acolhimento salvam vidas"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "você é a pessoa mais importante"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "pesquisa parz ensino"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "seja forte e corajosa"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "mulher determinada"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "o cuidado sempre presente"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "tenhamos sempre forças e esperanças"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "superação"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "mulher florescer"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "a c"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "você"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "floresce"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "quem acha cura"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "coragem e speração"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "esperanca e amparo"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "nunca podemos disistir, não existe vitória sem lutas"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "e preciso sempre se autoavaliar"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "todo cuidado preventivo salva vidas"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "continue na caminhada s2"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "mais empatia no primeiro diagnostico!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "sa"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "a jornada do paciente é fundamental para o tto"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "o afeto afeta"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "perseveranč̣"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "força  e fé"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "o amor cura!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "viva a  ida"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "que a informação correta chegue a todas as mulheres."
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "vocêé"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "gratidao pela vi da,"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "você não esta"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "que a indo"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "você nao esta sozinha"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "tu o"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "coragem,feé"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "se cuide!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "sja gentil"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "acredite no processo"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "que esperança prospere"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "direito a morte"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "mmeu"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "f eé"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "tenha fe"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "eu sou vencedora"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "amigas da mama cabo frio"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "viva o presente como se não houvesse amanhã, seja vida"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "ser com amot"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "saber paraviver imamars"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "você é incrível"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "conversas cuidam, abraços curam"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "viva a vida"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "asfecer"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "esperanca sempre. naspec"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "amo viver!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "acreditar na cura"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "ser com amor"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "gr"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "a fé é essen"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "esperança sempre"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "viver é ótimo,  ,,"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "ibcc enf"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "informacao"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "que deus continue abencoando nossa femama, e toda a equipe."
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "força, foco e fé"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "especial presenca de vocês na vida. os pacientes."
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "imff"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "pensamento positivo ânimo firme"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "viver um dia de cada vez."
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "juntos na prevencao e cuidado !"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "viva, ame e cuide"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "a prevenção e  o diagnostico precoce sempre são o melhor tratamento."
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "advocacy é a solução!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "saúde é para todas as pessoas"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "conhecimento e persistencia sao a chave"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "giu :)"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "conhecimento"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "cuidar de si também é um ato de amor !"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "viver e"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "a vida é bela"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "esperanca sempre"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "permira-se"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "vitoria"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "em cada estagio do tratamento que possa encontra a fe para junto ao tratament"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "tenha fé!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "tudo passa depois do inverno vem a primavera"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "cuidar"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "o mekho"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "que nunca nos falte esperanc"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "acredite em voc"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "enquanto a vida, há esperança"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "viver ultrapassa qualquer entendimento"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "amigod"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "coragem e recomeços"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "sempre tenha esperança"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "cuidado e"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "viva la vida calareo!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "re"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "esperanca é vida"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "vencedoras unidas"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "você vai vencer"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "voce ja curou"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "você já venceu!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "movimente-se"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "sempre haverá uma saída quando se tem fé!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "recomeço"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "nunca desista"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "o tempo é essencial para a cura!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "só seviveumavez. vitor leal"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "perseverança"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "deu 1"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "sorria"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "sororidade"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "todos tem direito de tratamento digno"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "sorria em tempos difíceis,  eles também passam!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "quem prcura acha,quem acha cura."
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "a jornada pode ser leve se bem acompanhada"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "a prevenção é o melhor exemplo de cura."
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "desis"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "força e fe"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "diagnostico precoce salva vidas ♡"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "fe e esperanca"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "coragem é contagiante"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "sempre cuide de você"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "fé , esperança e cuidado"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "fé sempre!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "nunca deixe de sonhar,,"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "muita luz!!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "pra quem tem fe a vida nunca tem fim"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "autovui."
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "nunca deixe de acreditar em si mesma !"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "asipeca"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "te amamos"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "saude"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "esperança e autoconhecimento"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "cuidado e respeito e tudo!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "fé e esperança!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "f"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "a fé nos faz crer que dias melhores virão"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "esperam"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "prevencwo"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "prevencao"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "tudo vai dar certo !"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "nada é tão nosso quanto nossos sonhos!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "voce nao esta sozinho nessa jornada!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "de"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "eu sou a protagonista da minha vida!!!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "corage"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "fé, esperança e amor"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "você não está sozinha \u003c3"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "prevencão"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "conhecimento é poder, ele traz acesso e pode te levar a cura!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "autoestima e confianca"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "parabens pela iniciativa"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "você não está sozinho"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "a dadiva da vida e viver"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "exames preventivos salvam vidas."
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "tenha coragem e seja gentil"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "ca"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "diagnostco precoce salva vidas"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "cuidar ė um ato de amor"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "cuide-se se ame"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "quem busca a luz encontra sua força"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "existe vida pos câncer"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "seja feliz, cuide se"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "amor e cuidado!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "amor e esperança!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "seja feliz e viva!!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "quem pr0"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "que todos e todas tenham acesso a diagnóstico  e tratamento."
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "o conhecimento de si é ter esperança  de dias melhores"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "lute como uma diva"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "caminhoa de"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "vai valer a pena"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "tu"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "voce é precicio"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "seja forte eco"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "protagonismo"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "possas vencer"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "desabroche com amor"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "com amor tudo fica mais leve!!!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "grata"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "todos tem direito a um cuidado humanizado"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "esperançar"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "compaixão"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "fé em deus"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "cuide da sua saúde"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "que ao olhar para cada região do brasil, seja descentralizadao."
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "o amor. urz"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "nada é tão nosso quanto nossos sonhos"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "movimento é amor e saúde"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "forca"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "buscar sempre prazer em viver!!!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "recomeçar sempre"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "muito amor e dignidade"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "amor tamben e se cuidar"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "amor e esperanca"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "c9"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "superacao,amor e todos juntos"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "amei as questoes"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "cuidar com amor"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "c:"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "esperança e fé"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "o caminho s"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "lute com esperança"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "entregue tudo  á deus"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "o atendimenti"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "cuide--se: ...faça sua parte"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "qm procura acha e qm acha cura"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "ha esperança sempre"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "cura vai alem da remissao"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "para alem do cuidado"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "0 cancer nao é  um bicho de 7 cabeças  não  tenha medo vc não  está  sozinha"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "amor e  ação"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "cuidado com o próprio  orot"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "que a esperança seja como o vento, forte e que traga alivio em dias quenres"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "a esperança é a última que morre"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "deus sabe de tudo"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "fé e resiliência p/ superar os desafios"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "os espimhos servem p diferenciar a delicadeza das flores,,,,"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "recomeco"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "nunca é tarde para iniciar um tratamento em qualquer fase, mesmo adiantado"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "o cuidado é primordial"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "desejo a todos pacientes resiliencia para passar por essa fase"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "vida,fe,esperanca!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "o cancer tem cura, sim!!!!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "o seu diagnóstico não é uma sentença \u003c3"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "tudo tem solucao"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "o câncer tem cura. eu venci o câncer."
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "#tjcc"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "viva essa jornada leve e com fé"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "fe sempre,alegria todos os dias"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "deus esta em tudo e em todas as coisas  creia"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "conhecimento é poder!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "todo cuidado importa!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "o caminho é desafiador, mas é só um capitulo de um livro com final feliz"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "esperanca e dignidade"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "tudo"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "resiliência e fé"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "autocuidado e compaixão"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "muito importante o trabalho da femama!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "que seja leve"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "o amor cura"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "a cura para todos os pacientes"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "paciencis"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "humanizacao"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "desejo que tenhamos uma saude de verdade"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "gratidão e esperança"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "fé e coragem"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "cuidado onvo"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "dignidade"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "ame-se"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "amor e carinho"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "ja deus certo"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "desejo acolhimento"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "bora viver!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  ",aei"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "dignidade e esperança"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "percevere"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "esperanca e superações"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "quem se ama se cuida!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "amor e cuidado"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "ter fe em deus"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "amor, carinho"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "carinho, cuidado e atenção"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "#meucaminho"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "você forte! nao desista!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "informação é vida!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "prevenção"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "precisamos de vida."
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "amor, cuidqdo"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "voce ja venceu"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "você é forte"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "a prevenção é o treino pela vida!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "a fé move moinhos"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "prevenč̣ao é o caminho"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "esperançaesperança"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "cuidado e fe"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "amor e acolhimento para todos"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "cresça!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "fazer o bem faz bem!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "um dia de cada vez!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "ter qualidade de vida"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "encantador"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "quem procura, se cura!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "divisor de água"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "viva!"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "viver"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "deus"
+                                       },
+                                       {
+                                           "count":  1,
+                                           "label":  "sobrevida"
+                                       }
+                                   ],
+                   "City":  [
+                                {
+                                    "count":  364,
+                                    "label":  "São Paulo"
+                                },
+                                {
+                                    "count":  129,
+                                    "label":  "Iperó"
+                                }
+                            ],
+                   "Country":  [
+                                   {
+                                       "count":  493,
+                                       "label":  "Brazil"
+                                   }
+                               ],
+                   "Browser":  [
+                                   {
+                                       "count":  493,
+                                       "label":  "Chrome"
+                                   }
+                               ],
+                   "Device":  [
+                                  {
+                                      "count":  492,
+                                      "label":  "Mobile"
+                                  },
+                                  {
+                                      "count":  1,
+                                      "label":  "Desktop"
+                                  }
+                              ]
+               },
+    "total":  493
+}

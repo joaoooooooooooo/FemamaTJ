@@ -48,6 +48,7 @@ export default function AdminPage({ drawings, error, isLoading, onRemove, onClea
         <nav aria-label="Navegação" className="flex flex-wrap gap-3">
           <Button variant="outline" render={<a href="/" />}><ArrowLeft aria-hidden="true" />Voltar ao início</Button>
           <Button variant="outline" render={<a href="/tree" />}>Ver painel de flores</Button>
+          <Button variant="outline" render={<a href="/resultados" />}>Resultados da pesquisa</Button>
         </nav>
 
         <header className="flex flex-wrap items-end justify-between gap-6">
