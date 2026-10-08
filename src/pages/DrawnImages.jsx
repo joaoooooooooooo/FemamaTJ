@@ -55,6 +55,11 @@ function getPointerDistance(first, second) {
   return Math.hypot(first.x - second.x, first.y - second.y);
 }
 
+function clampCameraAxis(value, viewportLength, frameLength) {
+  const margin = Math.min(0.5, viewportLength / (frameLength * 2));
+  return Math.min(1 - margin, Math.max(margin, value));
+}
+
 function getInitialCamera() {
   if (typeof window === "undefined") return DESKTOP_CAMERA;
   return window.matchMedia("(max-width: 767px)").matches ? MOBILE_CAMERA : DESKTOP_CAMERA;
@@ -101,20 +106,16 @@ function DrawnImages({
   error,
   isLoading,
   isRemote = false,
-  latestAddedDrawingId,
   onClearAll,
   onRefresh,
 }) {
   const [sizeMultiplier, setSizeMultiplier] = React.useState(1.5);
   const viewportRef = React.useRef(null);
   const animationFrameRef = React.useRef(0);
-  const lastAutoFocusedDrawingIdRef = React.useRef(null);
-  const knownFlowersRef = React.useRef(null);
-  const newestFlowerTimeRef = React.useRef(0);
-  const cameraBeforeSpotlightRef = React.useRef(null);
   const touchPointersRef = React.useRef(new Map());
   const pinchGestureRef = React.useRef(null);
-  const [spotlightQueue, setSpotlightQueue] = React.useState([]);
+  const panGestureRef = React.useRef(null);
+  const knownDrawingIdsRef = React.useRef(null);
   const [reducedMotion, setReducedMotion] = React.useState(false);
   const [viewportSize, setViewportSize] = React.useState({ width: 0, height: 0 });
   const [camera, setCamera] = React.useState(getInitialCamera);
@@ -158,62 +159,16 @@ function DrawnImages({
     return () => mobileViewport.removeEventListener("change", updateCameraForViewport);
   }, []);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (isLoading) return;
-    const ids = new Set(drawings.map((flower) => flower.id));
-    if (knownFlowersRef.current && !stressTestDrawings.length) {
-      const arrivals = drawings.filter((flower) =>
-        !knownFlowersRef.current.has(flower.id)
-        && Date.parse(flower.createdAt) >= newestFlowerTimeRef.current,
-      ).slice().reverse();
-      setSpotlightQueue((queue) => [...new Set([
-        ...queue.filter((id) => ids.has(id)), ...arrivals.map((flower) => flower.id),
-      ])]);
+    const ids = new Set(drawings.map((drawing) => drawing.id));
+    if (knownDrawingIdsRef.current && [...ids].some((id) => !knownDrawingIdsRef.current.has(id))) {
+      setIsAutoPlayEnabled(false);
     }
-    knownFlowersRef.current = ids;
-    newestFlowerTimeRef.current = Math.max(newestFlowerTimeRef.current,
-      ...drawings.map((flower) => Date.parse(flower.createdAt) || 0));
-  }, [drawings, isLoading, stressTestDrawings.length]);
-
-  const spotlightTarget = drawingTargets.find((target) => target.drawing.id === spotlightQueue[0]);
-  const spotlightId = spotlightTarget?.drawing.id;
-  const spotlightX = spotlightTarget?.point.x;
-  const spotlightY = spotlightTarget?.point.y;
-
-  React.useEffect(() => {
-    if (spotlightQueue.length && !spotlightId) {
-      setSpotlightQueue((queue) => queue.slice(1));
-    }
-  }, [spotlightQueue, spotlightId]);
-
-  React.useEffect(() => {
-    if (!spotlightId) return;
-    const timer = window.setTimeout(() => setSpotlightQueue((queue) => queue.slice(1)),
-      4000 + (reducedMotion ? 0 : 700));
-    return () => window.clearTimeout(timer);
-  }, [spotlightId, reducedMotion]);
-
-  React.useEffect(() => {
-    if (!spotlightId) {
-      if (cameraBeforeSpotlightRef.current) {
-        if (!isAutoPlayEnabled) setCamera(cameraBeforeSpotlightRef.current);
-        cameraBeforeSpotlightRef.current = null;
-      }
-      return;
-    }
-    window.cancelAnimationFrame(animationFrameRef.current);
-    setCamera((current) => {
-      cameraBeforeSpotlightRef.current ??= current;
-      return { ...current,
-        x: spotlightX / FRAME_VIEWBOX.width,
-        y: spotlightY / FRAME_VIEWBOX.height,
-        scale: Math.max(current.scale, 1.45),
-      };
-    });
-  }, [spotlightId, spotlightX, spotlightY, isAutoPlayEnabled]);
+    knownDrawingIdsRef.current = ids;
+  }, [drawings, isLoading]);
 
   function toggleStressTest() {
-    setSpotlightQueue([]);
     setSelectedDrawingIndex(0);
 
     if (stressTestDrawings.length) {
@@ -268,39 +223,22 @@ function DrawnImages({
     });
   }, []);
 
-  React.useEffect(() => {
-    if (!isAutoPlayEnabled || !drawingTargets.length) {
-      return;
-    }
-
-    const latestFocusId = latestAddedDrawingId ?? drawingTargets[0].drawing.id;
-    if (lastAutoFocusedDrawingIdRef.current === latestFocusId) {
-      return;
-    }
-
-    const latestIndex = drawingTargets.findIndex((target) => target.drawing.id === latestFocusId);
-    const nextSelectedIndex = latestIndex >= 0 ? latestIndex : 0;
-
-    lastAutoFocusedDrawingIdRef.current = latestFocusId;
-    setSelectedDrawingIndex(nextSelectedIndex);
-  }, [isAutoPlayEnabled, drawingTargets, latestAddedDrawingId]);
-
   const selectedTarget = drawingTargets[selectedDrawingIndex];
   const selectedTargetId = selectedTarget?.drawing.id;
   const selectedTargetX = selectedTarget?.point.x;
   const selectedTargetY = selectedTarget?.point.y;
 
   React.useEffect(() => {
-    if (spotlightId || !isAutoPlayEnabled || selectedTargetX === undefined || selectedTargetY === undefined) {
+    if (!isAutoPlayEnabled || selectedTargetX === undefined || selectedTargetY === undefined) {
       return;
     }
 
     animateCameraToPoint({ x: selectedTargetX, y: selectedTargetY });
     return () => window.cancelAnimationFrame(animationFrameRef.current);
-  }, [animateCameraToPoint, spotlightId, isAutoPlayEnabled, selectedTargetId, selectedTargetX, selectedTargetY]);
+  }, [animateCameraToPoint, isAutoPlayEnabled, selectedTargetId, selectedTargetX, selectedTargetY]);
 
   React.useEffect(() => {
-    if (spotlightId || !isAutoPlayEnabled || drawingTargets.length < 2) {
+    if (!isAutoPlayEnabled || drawingTargets.length < 2) {
       return undefined;
     }
 
@@ -311,7 +249,7 @@ function DrawnImages({
     }, transitionDurationMs + AUTO_PLAY_PAUSE_MS);
 
     return () => window.clearTimeout(timeoutId);
-  }, [spotlightId, drawingTargets.length, isAutoPlayEnabled, selectedDrawingIndex, transitionDurationMs]);
+  }, [drawingTargets.length, isAutoPlayEnabled, selectedDrawingIndex, transitionDurationMs]);
 
   const baseScale = Math.min(
     viewportSize.width / FRAME_VIEWBOX.width || 0,
@@ -327,8 +265,8 @@ function DrawnImages({
   const cameraStyle = {
             transform: `translate3d(${translateX}px, ${translateY}px, 0)`,
             transformOrigin: "0 0",
-            transition: !reducedMotion && (isAutoPlayEnabled || spotlightId)
-              ? `transform ${spotlightId ? 700 : transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1), width ${spotlightId ? 700 : transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1), height ${spotlightId ? 700 : transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1)`
+            transition: !reducedMotion && isAutoPlayEnabled
+              ? `transform ${transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1), width ${transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1), height ${transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1)`
               : "none",
             width: `${scaledFrameWidth}px`,
             height: `${scaledFrameHeight}px`,
@@ -341,7 +279,18 @@ function DrawnImages({
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
     event.currentTarget.setPointerCapture?.(event.pointerId);
 
+    if (pointers.size === 1) {
+      panGestureRef.current = {
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startY: event.clientY,
+        camera,
+      };
+    }
+
     if (pointers.size === 2 && viewportSize.width && viewportSize.height) {
+      panGestureRef.current = null;
+      setIsAutoPlayEnabled(false);
       const [first, second] = [...pointers.values()];
       const midpoint = { x: (first.x + second.x) / 2, y: (first.y + second.y) / 2 };
       const rect = event.currentTarget.getBoundingClientRect();
@@ -362,7 +311,27 @@ function DrawnImages({
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
 
     const gesture = pinchGestureRef.current;
-    if (!gesture || pointers.size < 2 || !viewportRef.current) return;
+    if (!viewportRef.current) return;
+
+    if (pointers.size === 1 && panGestureRef.current?.pointerId === event.pointerId) {
+      const pan = panGestureRef.current;
+      const deltaX = event.clientX - pan.startX;
+      const deltaY = event.clientY - pan.startY;
+      if (Math.abs(deltaX) + Math.abs(deltaY) < 2) return;
+
+      setIsAutoPlayEnabled(false);
+      const rect = viewportRef.current.getBoundingClientRect();
+      const panWidth = FRAME_VIEWBOX.width * baseScale * pan.camera.scale;
+      const panHeight = FRAME_VIEWBOX.height * baseScale * pan.camera.scale;
+      setCamera({
+        ...pan.camera,
+        x: clampCameraAxis(pan.camera.x - deltaX / panWidth, rect.width, panWidth),
+        y: clampCameraAxis(pan.camera.y - deltaY / panHeight, rect.height, panHeight),
+      });
+      return;
+    }
+
+    if (!gesture || pointers.size < 2) return;
 
     const [first, second] = [...pointers.values()];
     const midpoint = { x: (first.x + second.x) / 2, y: (first.y + second.y) / 2 };
@@ -378,8 +347,16 @@ function DrawnImages({
     setIsAutoPlayEnabled(false);
     setCamera({
       scale,
-      x: gesture.anchorX - (midpoint.x - rect.left - rect.width / 2) / nextWidth,
-      y: gesture.anchorY - (midpoint.y - rect.top - rect.height / 2) / nextHeight,
+      x: clampCameraAxis(
+        gesture.anchorX - (midpoint.x - rect.left - rect.width / 2) / nextWidth,
+        rect.width,
+        nextWidth,
+      ),
+      y: clampCameraAxis(
+        gesture.anchorY - (midpoint.y - rect.top - rect.height / 2) / nextHeight,
+        rect.height,
+        nextHeight,
+      ),
     });
   }
 
@@ -387,6 +364,17 @@ function DrawnImages({
     if (event.pointerType !== "touch") return;
     touchPointersRef.current.delete(event.pointerId);
     if (touchPointersRef.current.size < 2) pinchGestureRef.current = null;
+    if (touchPointersRef.current.size === 1) {
+      const [pointerId, point] = [...touchPointersRef.current.entries()][0];
+      panGestureRef.current = {
+        pointerId,
+        startX: point.x,
+        startY: point.y,
+        camera,
+      };
+    } else {
+      panGestureRef.current = null;
+    }
   }
 
   return (
@@ -623,19 +611,6 @@ function DrawnImages({
             </div>
           ))}
         </div>
-        {spotlightTarget ? (
-          <>
-            <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-20"
-              style={{ background: "radial-gradient(ellipse at center, rgba(45,20,30,0.12), rgba(45,20,30,0.58))", backdropFilter: "blur(3px)", WebkitBackdropFilter: "blur(3px)" }} />
-            <div aria-hidden="true" className="pointer-events-none absolute left-0 top-0 z-[21]" style={cameraStyle}>
-              <div className="absolute drop-shadow-[0_0_22px_rgba(255,230,235,0.65)]"
-                style={getPointStyle(spotlightTarget.point, sizeMultiplier)}>
-                <FlowerTextPreview flower={spotlightTarget.drawing} largeTextWordLimit={largeTextWordLimit}
-                  maxFontSize={maxFlowerFontSize} minFontSize={minFlowerFontSize} unstyled className="h-full w-full" />
-              </div>
-            </div>
-          </>
-        ) : null}
       </div>
       <SponsorPanel placement="tree" />
     </div>
