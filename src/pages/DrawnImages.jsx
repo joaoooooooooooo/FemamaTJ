@@ -298,8 +298,12 @@ function DrawnImages({
     const midpoint = { x: (first.x + second.x) / 2, y: (first.y + second.y) / 2 };
     const distance = getPointerDistance(first, second);
     const rect = viewportRef.current.getBoundingClientRect();
-    const scale = Math.min(MAX_CAMERA_SCALE, Math.max(
+    const minScale = Math.max(
       MIN_CAMERA_SCALE,
+      rect.height / (baseScale * FRAME_VIEWBOX.height * (1 - (BOTTOM_EDGE_GUARD * 2))),
+    );
+    const scale = Math.min(MAX_CAMERA_SCALE, Math.max(
+      minScale,
       gesture.camera.scale * (distance / gesture.distance),
     ));
     const nextWidth = FRAME_VIEWBOX.width * baseScale * scale;
