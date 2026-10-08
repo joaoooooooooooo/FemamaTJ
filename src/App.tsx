@@ -105,7 +105,7 @@ function App() {
   }, []);
 
   const goHome = React.useCallback(() => {
-    window.location.assign("/");
+    window.location.assign("/mensagem-flores");
   }, []);
 
   return (
