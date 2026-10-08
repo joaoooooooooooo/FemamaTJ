@@ -49,14 +49,16 @@ const DESKTOP_CAMERA = { x: 0.59, y: 0.10, scale: 3.4 };
 const MOBILE_CAMERA = { x: 0.67, y: 0.17, scale: 6 };
 const MIN_CAMERA_SCALE = 1;
 const MAX_CAMERA_SCALE = 10;
+const BOTTOM_EDGE_GUARD = 0.12;
 
 function getPointerDistance(first, second) {
   return Math.hypot(first.x - second.x, first.y - second.y);
 }
 
-function clampCameraAxis(value, viewportLength, frameLength) {
+function clampCameraAxis(value, viewportLength, frameLength, trailingGuard = 0) {
   const margin = Math.min(0.5, viewportLength / (frameLength * 2));
-  return Math.min(1 - margin, Math.max(margin, value));
+  const max = Math.max(margin, 1 - margin - trailingGuard);
+  return Math.min(max, Math.max(margin, value));
 }
 
 function getInitialCamera() {
@@ -280,7 +282,12 @@ function DrawnImages({
       setCamera({
         ...pan.camera,
         x: clampCameraAxis(pan.camera.x - deltaX / panWidth, rect.width, panWidth),
-        y: clampCameraAxis(pan.camera.y - deltaY / panHeight, rect.height, panHeight),
+        y: clampCameraAxis(
+          pan.camera.y - deltaY / panHeight,
+          rect.height,
+          panHeight,
+          BOTTOM_EDGE_GUARD,
+        ),
       });
       return;
     }
@@ -310,6 +317,7 @@ function DrawnImages({
         gesture.anchorY - (midpoint.y - rect.top - rect.height / 2) / nextHeight,
         rect.height,
         nextHeight,
+        BOTTOM_EDGE_GUARD,
       ),
     });
   }
@@ -519,12 +527,13 @@ function DrawnImages({
 
       <div
         ref={viewportRef}
-        className="absolute inset-0 overflow-hidden bg-[#F1E7E4]"
+        className="absolute inset-0 select-none overflow-hidden bg-[#F1E7E4] cursor-grab active:cursor-grabbing"
         onPointerDown={handleTouchPointerDown}
         onPointerMove={handleTouchPointerMove}
         onPointerUp={handleTouchPointerEnd}
         onPointerCancel={handleTouchPointerEnd}
-        style={{ touchAction: "none" }}
+        onDragStart={(event) => event.preventDefault()}
+        style={{ touchAction: "none", userSelect: "none", WebkitUserSelect: "none" }}
       >
         {/* The background fills the viewport independently of the tree camera. */}
         <TreeBackground />
@@ -535,6 +544,7 @@ function DrawnImages({
         >
           <img
             src={frameVisibleImage}
+            draggable="false"
             alt=""
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 z-10 h-full w-full"
@@ -542,6 +552,7 @@ function DrawnImages({
 
           <img
             src={frameRefImage}
+            draggable="false"
             alt=""
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 z-30 h-full w-full opacity-0"
