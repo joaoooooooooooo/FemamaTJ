@@ -48,6 +48,12 @@ const STRESS_TEST_WORDS = [
 ];
 const DESKTOP_CAMERA = { x: 0.59, y: 0.10, scale: 3.4 };
 const MOBILE_CAMERA = { x: 0.67, y: 0.17, scale: 6 };
+const MIN_CAMERA_SCALE = 1;
+const MAX_CAMERA_SCALE = 10;
+
+function getPointerDistance(first, second) {
+  return Math.hypot(first.x - second.x, first.y - second.y);
+}
 
 function getInitialCamera() {
   if (typeof window === "undefined") return DESKTOP_CAMERA;
@@ -106,6 +112,8 @@ function DrawnImages({
   const knownFlowersRef = React.useRef(null);
   const newestFlowerTimeRef = React.useRef(0);
   const cameraBeforeSpotlightRef = React.useRef(null);
+  const touchPointersRef = React.useRef(new Map());
+  const pinchGestureRef = React.useRef(null);
   const [spotlightQueue, setSpotlightQueue] = React.useState([]);
   const [reducedMotion, setReducedMotion] = React.useState(false);
   const [viewportSize, setViewportSize] = React.useState({ width: 0, height: 0 });
@@ -326,6 +334,61 @@ function DrawnImages({
             height: `${scaledFrameHeight}px`,
   };
 
+  function handleTouchPointerDown(event) {
+    if (event.pointerType !== "touch") return;
+
+    const pointers = touchPointersRef.current;
+    pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+
+    if (pointers.size === 2 && viewportSize.width && viewportSize.height) {
+      const [first, second] = [...pointers.values()];
+      const midpoint = { x: (first.x + second.x) / 2, y: (first.y + second.y) / 2 };
+      const rect = event.currentTarget.getBoundingClientRect();
+      pinchGestureRef.current = {
+        distance: getPointerDistance(first, second),
+        midpoint,
+        camera,
+        anchorX: camera.x + (midpoint.x - rect.left - rect.width / 2) / scaledFrameWidth,
+        anchorY: camera.y + (midpoint.y - rect.top - rect.height / 2) / scaledFrameHeight,
+      };
+    }
+  }
+
+  function handleTouchPointerMove(event) {
+    if (event.pointerType !== "touch") return;
+    const pointers = touchPointersRef.current;
+    if (!pointers.has(event.pointerId)) return;
+    pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+    const gesture = pinchGestureRef.current;
+    if (!gesture || pointers.size < 2 || !viewportRef.current) return;
+
+    const [first, second] = [...pointers.values()];
+    const midpoint = { x: (first.x + second.x) / 2, y: (first.y + second.y) / 2 };
+    const distance = getPointerDistance(first, second);
+    const rect = viewportRef.current.getBoundingClientRect();
+    const scale = Math.min(MAX_CAMERA_SCALE, Math.max(
+      MIN_CAMERA_SCALE,
+      gesture.camera.scale * (distance / gesture.distance),
+    ));
+    const nextWidth = FRAME_VIEWBOX.width * baseScale * scale;
+    const nextHeight = FRAME_VIEWBOX.height * baseScale * scale;
+
+    setIsAutoPlayEnabled(false);
+    setCamera({
+      scale,
+      x: gesture.anchorX - (midpoint.x - rect.left - rect.width / 2) / nextWidth,
+      y: gesture.anchorY - (midpoint.y - rect.top - rect.height / 2) / nextHeight,
+    });
+  }
+
+  function handleTouchPointerEnd(event) {
+    if (event.pointerType !== "touch") return;
+    touchPointersRef.current.delete(event.pointerId);
+    if (touchPointersRef.current.size < 2) pinchGestureRef.current = null;
+  }
+
   return (
     <div className="relative h-dvh w-full overflow-hidden bg-[#F7F0EE]">
       {isDebugOpen ? <div className="pointer-events-none absolute inset-x-0 top-0 z-30 p-4 sm:p-6">
@@ -516,6 +579,11 @@ function DrawnImages({
       <div
         ref={viewportRef}
         className="absolute inset-0 overflow-hidden bg-[#F1E7E4]"
+        onPointerDown={handleTouchPointerDown}
+        onPointerMove={handleTouchPointerMove}
+        onPointerUp={handleTouchPointerEnd}
+        onPointerCancel={handleTouchPointerEnd}
+        style={{ touchAction: "none" }}
       >
         {/* The background fills the viewport independently of the tree camera. */}
         <TreeBackground />
