@@ -51,7 +51,7 @@ import { SponsorPanel } from "@/components/ui/sponsor-panel";
 function SquircleFrame({ children, className = "" }) {
   return (
     <div
-      className={`relative flex flex-col rounded-t-[32px] bg-[#FBFAFA] p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[0_24px_60px_rgba(180,94,113,0.12)] group-data-active/questionnaire-item:[animation:questionnaire-frame-in_320ms_cubic-bezier(0.2,0,0,1)] motion-reduce:group-data-active/questionnaire-item:[animation:none] ${className}`}
+      className={`relative flex flex-col rounded-t-[32px] bg-[#FBFAFA] p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_24px_60px_rgba(180,94,113,0.12)] sm:p-4 sm:pb-[max(1rem,env(safe-area-inset-bottom))] group-data-active/questionnaire-item:[animation:questionnaire-frame-in_320ms_cubic-bezier(0.2,0,0,1)] motion-reduce:group-data-active/questionnaire-item:[animation:none] ${className}`}
     >
       {children}
     </div>
@@ -304,7 +304,7 @@ export function QuestionnaireForm({
         <Questionnaire
           key={formSession}
           inert={!hasStarted}
-          className={`questionnaire-form-panel relative min-h-0 w-full max-w-xl shrink-0 gap-6 overflow-y-auto overscroll-contain rounded-t-[32px] transition-opacity duration-300 ${hasStarted ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
+          className={`questionnaire-form-panel relative min-h-0 w-full max-w-xl shrink-0 gap-4 overflow-y-auto overscroll-contain rounded-t-[32px] transition-opacity duration-300 sm:gap-6 ${hasStarted ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
           item={currentItem}
           items={items}
           onItemChange={(itemName) => {
@@ -323,7 +323,7 @@ export function QuestionnaireForm({
                 }
               >
                 {question.type === "text" ? (
-                  <div className="px-4 pt-4 sm:px-5 sm:pt-5">
+                  <div className="px-3 pt-3 sm:px-5 sm:pt-5">
                     <label className="relative flex flex-col gap-2 text-sm font-medium text-[#5D3D39]">
                       <QuestionnaireInput
                         id="flower-text"
@@ -357,7 +357,7 @@ export function QuestionnaireForm({
                 ) : null}
 
                 <FrameHeader
-                  className={`w-full px-1 pt-4 pb-4 sm:px-6 ${currentItem === question.name ? "[animation:questionnaire-content-in_280ms_cubic-bezier(0.2,0,0,1)] motion-reduce:[animation:none]" : ""}`}
+                  className={`w-full px-1 pt-3 pb-3 sm:px-6 sm:pt-4 sm:pb-4 ${currentItem === question.name ? "[animation:questionnaire-content-in_280ms_cubic-bezier(0.2,0,0,1)] motion-reduce:[animation:none]" : ""}`}
                 >
                   {question.type !== "text" ? (
                     <div
@@ -389,10 +389,10 @@ export function QuestionnaireForm({
                   </FrameTitle>
                 </FrameHeader>
 
-                <div className="flex flex-col gap-4 px-4 pb-4 sm:px-5 sm:pb-5">
+                <div className="flex flex-col gap-3 px-3 pb-3 sm:gap-4 sm:px-5 sm:pb-5">
                   {question.type !== "text" ? (
                     <QuestionnaireChoices
-                      className={`gap-3 ${currentItem === question.name ? "[animation:questionnaire-content-in_360ms_cubic-bezier(0.2,0,0,1)] motion-reduce:[animation:none]" : ""}`}
+                      className={`gap-2.5 sm:gap-3 ${currentItem === question.name ? "[animation:questionnaire-content-in_360ms_cubic-bezier(0.2,0,0,1)] motion-reduce:[animation:none]" : ""}`}
                     >
                       {question.options.map((option) => (
                         <QuestionnaireChoice
