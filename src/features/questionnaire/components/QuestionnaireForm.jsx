@@ -118,6 +118,8 @@ export function QuestionnaireForm({
   const [activeGlossaryQuestionName, setActiveGlossaryQuestionName] = React.useState(null);
   const [flowerVariantId] = React.useState(() => getRandomFlowerVariantId());
   const startButtonRef = React.useRef(null);
+  const formPanelRef = React.useRef(null);
+  const [showScrollFade, setShowScrollFade] = React.useState(false);
   const currentQuestionIndex = Math.max(
     questions.findIndex((question) => question.name === currentItem),
     0,
@@ -132,6 +134,28 @@ export function QuestionnaireForm({
   React.useEffect(() => {
     previousProgressPercentRef.current = progressPercent;
   }, [progressPercent]);
+
+  React.useEffect(() => {
+    const panel = formPanelRef.current;
+    if (!panel) return undefined;
+
+    const updateScrollFade = () => {
+      const hasMoreContent = panel.scrollHeight > panel.clientHeight + 1;
+      const isAtBottom = panel.scrollTop + panel.clientHeight >= panel.scrollHeight - 1;
+      setShowScrollFade(hasMoreContent && !isAtBottom);
+    };
+
+    updateScrollFade();
+    panel.addEventListener("scroll", updateScrollFade, { passive: true });
+    const resizeObserver = new ResizeObserver(updateScrollFade);
+    resizeObserver.observe(panel);
+    resizeObserver.observe(panel.firstElementChild ?? panel);
+
+    return () => {
+      panel.removeEventListener("scroll", updateScrollFade);
+      resizeObserver.disconnect();
+    };
+  }, [currentItem, hasStarted]);
 
   React.useEffect(() => {
     if (submissionStatus !== "success") {
@@ -302,6 +326,7 @@ export function QuestionnaireForm({
         ) : null}
 
         <Questionnaire
+          ref={formPanelRef}
           key={formSession}
           inert={!hasStarted}
           className={`questionnaire-form-panel relative min-h-0 w-full max-w-xl shrink-0 gap-4 overflow-y-auto overscroll-contain rounded-t-[32px] transition-opacity duration-300 sm:gap-6 ${hasStarted ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
@@ -507,6 +532,10 @@ export function QuestionnaireForm({
             </QuestionnaireItem>
           ))}
         </Questionnaire>
+
+        {showScrollFade && hasStarted ? (
+          <div aria-hidden="true" className="questionnaire-scroll-fade pointer-events-none absolute inset-x-4 bottom-0 z-20 h-8 sm:hidden" />
+        ) : null}
 
         <SponsorPanel placement={hasStarted ? "top" : "bottom"} />
 

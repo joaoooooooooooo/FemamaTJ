@@ -6,6 +6,16 @@
   overflow-x: hidden;
 }
 
+@media (max-width: 767px) {
+  .questionnaire-form-panel {
+    max-height: calc(50dvh / 0.9);
+  }
+}
+
+.questionnaire-scroll-fade {
+  background: linear-gradient(to bottom, rgb(251 250 250 / 0), #fbfafa 85%);
+}
+
 .questionnaire-form-panel::-webkit-scrollbar {
   display: none;
 }
