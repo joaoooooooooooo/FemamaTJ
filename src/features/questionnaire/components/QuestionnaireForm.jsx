@@ -1,3 +1,5 @@
+import "./QuestionnaireForm.css";
+import "@/components/ui/rive-edge-fade.css";
 import * as React from "react";
 import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import {
@@ -43,7 +45,7 @@ import { FlowerTextPreview } from "@/features/drawings/components/FlowerTextPrev
 import { getRandomFlowerVariantId } from "@/features/drawings/lib/flowerVariants";
 import { useQuestionnaireForm } from "@/features/questionnaire/hooks/useQuestionnaireForm";
 import { playQuestionnaireSound } from "@/lib/questionnaire-audio";
-import fase1Rive from "@/assets/Fase1.riv?url";
+import fase1Rive from "@/assets/Fase1(2).riv?url";
 import { SponsorPanel } from "@/components/ui/sponsor-panel";
 
 function SquircleFrame({ children, className = "" }) {
@@ -62,7 +64,8 @@ function useQuestionnaireRiveBackground() {
     stateMachines: "Fase01",
     autoplay: true,
     layout: new Layout({
-      fit: Fit.Contain,
+      // Scale by height only; the full-width canvas leaves room for side artwork.
+      fit: Fit.FitHeight,
       alignment: Alignment.Center,
     }),
   });
@@ -87,7 +90,7 @@ function useQuestionnaireRiveBackground() {
     triggerProxima,
     isReady: Boolean(viewModelInstance),
     element: (
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div className="rive-edge-fade pointer-events-none absolute inset-0 overflow-hidden">
         <RiveComponent className="h-full w-full" aria-hidden="true" />
       </div>
     ),
@@ -114,7 +117,6 @@ export function QuestionnaireForm({
   const [isGlossaryDrawerOpen, setIsGlossaryDrawerOpen] = React.useState(false);
   const [activeGlossaryQuestionName, setActiveGlossaryQuestionName] = React.useState(null);
   const [flowerVariantId] = React.useState(() => getRandomFlowerVariantId());
-  const drawerPortalRef = React.useRef(null);
   const startButtonRef = React.useRef(null);
   const currentQuestionIndex = Math.max(
     questions.findIndex((question) => question.name === currentItem),
@@ -222,17 +224,6 @@ export function QuestionnaireForm({
       return;
     }
 
-    try {
-      if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen({ navigationUI: "hide" }).catch((error) => {
-          console.warn("Fullscreen request failed:", error);
-        });
-      }
-    } catch (error) {
-      // Fullscreen is optional; keep starting the questionnaire if it fails.
-      console.warn("Fullscreen request failed:", error);
-    }
-
     setHasStarted(true);
     triggerProxima();
   }
@@ -282,13 +273,10 @@ export function QuestionnaireForm({
   }
 
   return (
-    <TabletStage>
+    <TabletStage background={element}>
       <div
-        ref={drawerPortalRef}
-        className="relative flex h-full w-full flex-col items-center justify-end overflow-hidden bg-[#F7F0EE] px-4 pt-6 sm:px-6 [transform:translateZ(0)]"
+        className="relative flex h-full w-full flex-col items-center justify-end overflow-hidden px-4 pt-6 sm:px-6 [transform:translateZ(0)]"
       >
-        {element}
-
         {hasStarted && currentItem === "flower_text" ? (
           <div className="pointer-events-none absolute inset-x-6 top-[14%] bottom-[31%] z-[5] flex items-center justify-center sm:inset-x-10 sm:bottom-[30%]">
             <FlowerTextPreview
@@ -316,7 +304,7 @@ export function QuestionnaireForm({
         <Questionnaire
           key={formSession}
           inert={!hasStarted}
-          className={`relative max-h-[82%] min-h-0 w-full max-w-xl shrink-0 gap-6 overflow-y-auto overscroll-contain rounded-t-[32px] transition-opacity duration-300 ${hasStarted ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
+          className={`questionnaire-form-panel relative min-h-0 w-full max-w-xl shrink-0 gap-6 overflow-y-auto overscroll-contain rounded-t-[32px] transition-opacity duration-300 ${hasStarted ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
           item={currentItem}
           items={items}
           onItemChange={(itemName) => {
@@ -546,14 +534,13 @@ export function QuestionnaireForm({
             position="bottom"
             variant="default"
             showBar={false}
-            className="rounded-t-[28px] border-border/60 bg-background"
-            portalProps={{ container: drawerPortalRef }}
+            className="mx-auto w-full max-w-4xl rounded-t-[28px] border-border/60 bg-background"
           >
             <DrawerHeader className="gap-3 px-6 pt-6 pb-6 sm:px-7">
-              <DrawerTitle className="text-[40px] leading-tight font-semibold text-foreground">
+              <DrawerTitle className="text-2xl leading-tight font-semibold text-foreground sm:text-3xl">
                 {activeGlossaryQuestion?.glossaryDrawer?.title}
               </DrawerTitle>
-              <DrawerDescription className="text-[24px] leading-relaxed text-muted-foreground">
+              <DrawerDescription className="text-lg leading-relaxed text-muted-foreground sm:text-xl">
                 {activeGlossaryQuestion?.glossaryDrawer?.description}
               </DrawerDescription>
             </DrawerHeader>

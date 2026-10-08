@@ -1,0 +1,11 @@
+.questionnaire-form-panel {
+  /* Account for the stage transform so the final form size is always 90%. */
+  zoom: calc(0.9 / var(--stage-scale, 1));
+  max-height: calc(82dvh / 0.9);
+  scrollbar-width: none;
+  overflow-x: hidden;
+}
+
+.questionnaire-form-panel::-webkit-scrollbar {
+  display: none;
+}

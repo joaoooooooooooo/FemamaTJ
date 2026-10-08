@@ -47,7 +47,7 @@ export default function AdminPage({ drawings, error, isLoading, onRemove, onClea
       <div className="mx-auto flex max-w-7xl flex-col gap-8">
         <nav aria-label="Navegação" className="flex flex-wrap gap-3">
           <Button variant="outline" render={<a href="/" />}><ArrowLeft aria-hidden="true" />Voltar ao início</Button>
-          <Button variant="outline" render={<a href="/tree" />}>Ver painel de flores</Button>
+          <Button variant="outline" render={<a href="/mensagem-flores" />}>Ver painel de flores</Button>
           <Button variant="outline" render={<a href="/resultados" />}>Resultados da pesquisa</Button>
         </nav>
 

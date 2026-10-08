@@ -48,6 +48,12 @@
   padding-block-start: env(safe-area-inset-top, 0px);
 }
 
+@media (max-width: 1024px) {
+  .sponsor-panel--top {
+    inline-size: 40%;
+  }
+}
+
 .sponsor-panel--tree {
   inset-inline-end: 0;
   inset-block-end: 0;

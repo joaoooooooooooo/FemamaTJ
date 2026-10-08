@@ -1,10 +1,10 @@
+import "@/components/ui/rive-edge-fade.css";
 import { SponsorPanel } from "@/components/ui/sponsor-panel";
 import frameVisibleImage from "@/assets/Frame Visible02.svg";
 import frameRefImage from "@/assets/Frame Ref02.svg";
 import * as React from "react";
 import { Alignment, Fit, Layout, useRive } from "@rive-app/react-webgl2";
-import fase1Rive from "@/assets/Fase1.riv?url";
-import { Plus, X } from "lucide-react";
+import fase1Rive from "@/assets/Fase1(2).riv?url";
 import { Switch } from "@/components/ui/switch";
 import { FlowerTextPreview } from "@/features/drawings/components/FlowerTextPreview";
 import { DRAWING_POINTS } from "@/features/drawings/lib/tree-layout";
@@ -20,7 +20,7 @@ const TreeBackground = React.memo(function TreeBackground() {
   });
 
   return (
-    <div data-tree-background aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+    <div data-tree-background aria-hidden="true" className="rive-edge-fade pointer-events-none absolute inset-0 z-0 overflow-hidden" style={{ "--rive-edge-color": "#F1E7E4" }}>
       <RiveComponent className="h-full w-full" />
     </div>
   );
@@ -46,11 +46,13 @@ const STRESS_TEST_WORDS = [
   "luz",
   "vida",
 ];
-const INITIAL_CAMERA = {
-  x: 0.5,
-  y: 0.5,
-  scale: 1.15,
-};
+const DESKTOP_CAMERA = { x: 0.59, y: 0.10, scale: 3.4 };
+const MOBILE_CAMERA = { x: 0.67, y: 0.17, scale: 6 };
+
+function getInitialCamera() {
+  if (typeof window === "undefined") return DESKTOP_CAMERA;
+  return window.matchMedia("(max-width: 767px)").matches ? MOBILE_CAMERA : DESKTOP_CAMERA;
+}
 
 function getPointStyle(point, sizeMultiplier) {
   const slotSize = BASE_SLOT_SIZE * FRAME_VIEWBOX.width * sizeMultiplier;
@@ -97,7 +99,7 @@ function DrawnImages({
   onClearAll,
   onRefresh,
 }) {
-  const [sizeMultiplier, setSizeMultiplier] = React.useState(0.5);
+  const [sizeMultiplier, setSizeMultiplier] = React.useState(1.5);
   const viewportRef = React.useRef(null);
   const animationFrameRef = React.useRef(0);
   const lastAutoFocusedDrawingIdRef = React.useRef(null);
@@ -107,10 +109,10 @@ function DrawnImages({
   const [spotlightQueue, setSpotlightQueue] = React.useState([]);
   const [reducedMotion, setReducedMotion] = React.useState(false);
   const [viewportSize, setViewportSize] = React.useState({ width: 0, height: 0 });
-  const [camera, setCamera] = React.useState(INITIAL_CAMERA);
+  const [camera, setCamera] = React.useState(getInitialCamera);
   const [transitionDurationMs, setTransitionDurationMs] = React.useState(2800);
   const [selectedDrawingIndex, setSelectedDrawingIndex] = React.useState(0);
-  const [isDebugOpen, setIsDebugOpen] = React.useState(false);
+  const isDebugOpen = false;
   const [isAutoPlayEnabled, setIsAutoPlayEnabled] = React.useState(true);
   const [stressTestDrawings, setStressTestDrawings] = React.useState([]);
   const [minFlowerFontSize, setMinFlowerFontSize] = React.useState(9.5);
@@ -136,6 +138,16 @@ function DrawnImages({
     update();
     media.addEventListener("change", update);
     return () => media.removeEventListener("change", update);
+  }, []);
+
+  React.useEffect(() => {
+    const mobileViewport = window.matchMedia("(max-width: 767px)");
+    const updateCameraForViewport = () => {
+      setCamera(mobileViewport.matches ? MOBILE_CAMERA : DESKTOP_CAMERA);
+    };
+
+    mobileViewport.addEventListener("change", updateCameraForViewport);
+    return () => mobileViewport.removeEventListener("change", updateCameraForViewport);
   }, []);
 
   React.useEffect(() => {
@@ -316,7 +328,7 @@ function DrawnImages({
 
   return (
     <div className="relative h-dvh w-full overflow-hidden bg-[#F7F0EE]">
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 p-4 sm:p-6">
+      {isDebugOpen ? <div className="pointer-events-none absolute inset-x-0 top-0 z-30 p-4 sm:p-6">
         <div className="flex items-start justify-between gap-4">
           {isDebugOpen ? (
           <div className="pointer-events-auto rounded-2xl bg-white/85 px-4 py-3 shadow-sm backdrop-blur-sm">
@@ -498,19 +510,8 @@ function DrawnImages({
           </div>
           ) : <div />}
 
-          <div className="pointer-events-auto flex items-center gap-2">
-            <button
-              type="button"
-              className="flex size-8 items-center justify-center rounded-full bg-white/90 text-[#5D3D39] shadow-sm backdrop-blur-sm transition-transform hover:scale-105"
-              aria-expanded={isDebugOpen}
-              aria-label={isDebugOpen ? "Fechar controles da arvore" : "Abrir controles da arvore"}
-              onClick={() => setIsDebugOpen((isOpen) => !isOpen)}
-            >
-              {isDebugOpen ? <X className="size-4" /> : <Plus className="size-4" />}
-            </button>
-          </div>
         </div>
-      </div>
+      </div> : null}
 
       <div
         ref={viewportRef}

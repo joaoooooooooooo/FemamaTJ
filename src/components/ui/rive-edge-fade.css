@@ -1,0 +1,22 @@
+/* Opaque outer margins hide artwork seams before the blend begins. */
+.rive-edge-fade::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    var(--rive-edge-color, #F7F0EE) 0%,
+    var(--rive-edge-color, #F7F0EE) 12%,
+    transparent 40%,
+    transparent 60%,
+    var(--rive-edge-color, #F7F0EE) 88%,
+    var(--rive-edge-color, #F7F0EE) 100%
+  );
+}
+
+@media (max-width: 1024px), (any-pointer: coarse) {
+  .rive-edge-fade::after {
+    display: none;
+  }
+}

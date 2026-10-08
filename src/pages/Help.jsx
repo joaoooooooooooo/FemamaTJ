@@ -44,7 +44,7 @@ export default function HelpPage() {
           <ol>
             <li>Conecte o notebook à televisão usando o cabo HDMI.</li>
             <li>Na televisão, selecione a entrada HDMI correspondente.</li>
-            <li>No notebook, abra a página da árvore: <a href="https://femamagame.vercel.app/tree" target="_blank" rel="noreferrer">femamagame.vercel.app/tree</a>.</li>
+            <li>No notebook, abra a página da árvore: <a href="https://femamagame.vercel.app/mensagem-flores" target="_blank" rel="noreferrer">femamagame.vercel.app/mensagem-flores</a>.</li>
             <li>Siga o vídeo abaixo para concluir a configuração da exibição.</li>
           </ol>
           <figure className="help-video">

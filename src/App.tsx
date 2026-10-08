@@ -18,7 +18,7 @@ function getPageFromPath(pathname: string) {
   if (pathname === "/resultados" || pathname === "/resultados/") return "analytics";
   if (pathname === "/help" || pathname === "/help/") return "help";
   if (pathname === "/admin" || pathname === "/admin/") return "admin";
-  if (pathname === "/tree") {
+  if (pathname === "/mensagem-flores" || pathname === "/mensagem-flores/") {
     return "tree-camera";
   }
 
@@ -29,8 +29,52 @@ function getPageFromPath(pathname: string) {
   return "questionnaire";
 }
 
+function AdminPasswordGate({ onUnlock }: { onUnlock: () => void }) {
+  const [password, setPassword] = React.useState("");
+  const [hasError, setHasError] = React.useState(false);
+
+  function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (password === "16425") {
+      onUnlock();
+      return;
+    }
+    setPassword("");
+    setHasError(true);
+  }
+
+  return (
+    <main className="flex min-h-dvh items-center justify-center bg-[#F7F0EE] px-4 py-10 text-[#5D3D39]">
+      <form onSubmit={submit} className="w-full max-w-sm rounded-3xl border border-[#E7D6D1] bg-white p-6 shadow-sm sm:p-8">
+        <p className="text-xs font-semibold tracking-[0.2em] text-[#7E5F59] uppercase">Administração</p>
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight">Acesso restrito</h1>
+        <p className="mt-2 text-sm text-[#7E5F59]">Digite a senha de cinco dígitos para continuar.</p>
+        <label className="mt-6 block text-sm font-medium" htmlFor="admin-password">Senha</label>
+        <input
+          id="admin-password"
+          type="password"
+          inputMode="numeric"
+          pattern="[0-9]{5}"
+          maxLength={5}
+          autoComplete="current-password"
+          required
+          value={password}
+          onChange={(event) => { setPassword(event.target.value.replace(/\D/g, "").slice(0, 5)); setHasError(false); }}
+          className="mt-2 w-full rounded-xl border border-[#D8C1BC] bg-white px-4 py-3 text-lg tracking-[0.35em] outline-none focus-visible:ring-2 focus-visible:ring-[#B45E71]"
+          aria-invalid={hasError}
+          aria-describedby={hasError ? "admin-password-error" : undefined}
+        />
+        {hasError ? <p id="admin-password-error" role="alert" className="mt-2 text-sm text-destructive">Senha incorreta. Tente novamente.</p> : null}
+        <button type="submit" className="mt-5 w-full rounded-xl bg-[#8E4B56] px-4 py-3 font-medium text-white hover:bg-[#783D47]">Entrar</button>
+        <a href="/" className="mt-4 block text-center text-sm text-[#7E5F59] underline underline-offset-4">Voltar ao início</a>
+      </form>
+    </main>
+  );
+}
+
 function App() {
   const [currentPage, setCurrentPage] = React.useState(() => getPageFromPath(window.location.pathname));
+  const [isAdminUnlocked, setIsAdminUnlocked] = React.useState(false);
   const { clearDrawings, drawings, removeDrawing, saveDrawing } = useSavedFlowerDrawings();
   const treeApiUrl = import.meta.env.VITE_TREE_API_URL?.trim() ?? "";
   const remoteTree = useTreeDrawings({
@@ -73,7 +117,7 @@ function App() {
       ) : currentPage === "help" ? (
         <HelpPage />
       ) : currentPage === "admin" ? (
-        <AdminPage
+        isAdminUnlocked ? <AdminPage
           drawings={treeFlowers}
           error={treeApiUrl ? remoteTree.error : null}
           isLoading={treeApiUrl ? remoteTree.isLoading : false}
@@ -94,7 +138,7 @@ function App() {
             clearDrawings();
             return { error: null };
           }}
-        />
+        /> : <AdminPasswordGate onUnlock={() => setIsAdminUnlocked(true)} />
       ) : currentPage === "questionnaire" ? (
         <QuestionnairePage
           onStartDrawing={async (answers: Record<string, FormDataEntryValue | null>, flowerVariantId: string) => {
