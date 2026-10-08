@@ -1,21 +1,8 @@
-.questionnaire-form-panel {
+.questionnaire-form-shell {
   /* Account for the stage transform so the final form size is always 90%. */
   zoom: calc(0.9 / var(--stage-scale, 1));
-  max-height: calc(82dvh / 0.9);
-  scrollbar-width: none;
-  overflow-x: hidden;
 }
 
-@media (max-width: 767px) {
-  .questionnaire-form-panel {
-    max-height: calc(50dvh / 0.9);
-  }
-}
-
-.questionnaire-scroll-fade {
-  background: linear-gradient(to bottom, rgb(251 250 250 / 0), #fbfafa 85%);
-}
-
-.questionnaire-form-panel::-webkit-scrollbar {
-  display: none;
+.questionnaire-form-panel {
+  overflow: visible;
 }

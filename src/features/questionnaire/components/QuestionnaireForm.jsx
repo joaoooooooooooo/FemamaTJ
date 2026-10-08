@@ -118,8 +118,6 @@ export function QuestionnaireForm({
   const [activeGlossaryQuestionName, setActiveGlossaryQuestionName] = React.useState(null);
   const [flowerVariantId] = React.useState(() => getRandomFlowerVariantId());
   const startButtonRef = React.useRef(null);
-  const formPanelRef = React.useRef(null);
-  const [showScrollFade, setShowScrollFade] = React.useState(false);
   const currentQuestionIndex = Math.max(
     questions.findIndex((question) => question.name === currentItem),
     0,
@@ -134,28 +132,6 @@ export function QuestionnaireForm({
   React.useEffect(() => {
     previousProgressPercentRef.current = progressPercent;
   }, [progressPercent]);
-
-  React.useEffect(() => {
-    const panel = formPanelRef.current;
-    if (!panel) return undefined;
-
-    const updateScrollFade = () => {
-      const hasMoreContent = panel.scrollHeight > panel.clientHeight + 1;
-      const isAtBottom = panel.scrollTop + panel.clientHeight >= panel.scrollHeight - 1;
-      setShowScrollFade(hasMoreContent && !isAtBottom);
-    };
-
-    updateScrollFade();
-    panel.addEventListener("scroll", updateScrollFade, { passive: true });
-    const resizeObserver = new ResizeObserver(updateScrollFade);
-    resizeObserver.observe(panel);
-    resizeObserver.observe(panel.firstElementChild ?? panel);
-
-    return () => {
-      panel.removeEventListener("scroll", updateScrollFade);
-      resizeObserver.disconnect();
-    };
-  }, [currentItem, hasStarted]);
 
   React.useEffect(() => {
     if (submissionStatus !== "success") {
@@ -325,19 +301,19 @@ export function QuestionnaireForm({
           </button>
         ) : null}
 
-        <Questionnaire
-          ref={formPanelRef}
-          key={formSession}
-          inert={!hasStarted}
-          className={`questionnaire-form-panel relative min-h-0 w-full max-w-xl shrink-0 gap-4 overflow-y-auto overscroll-contain rounded-t-[32px] transition-opacity duration-300 sm:gap-6 ${hasStarted ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
-          item={currentItem}
-          items={items}
-          onItemChange={(itemName) => {
-            setCurrentItem(itemName);
-            setInvalidItemName(null);
-          }}
-          onSubmit={handleSubmit}
-        >
+        <div className="questionnaire-form-shell relative w-full max-w-xl shrink-0">
+          <Questionnaire
+            key={formSession}
+            inert={!hasStarted}
+            className={`questionnaire-form-panel relative min-h-0 w-full gap-4 rounded-t-[32px] transition-opacity duration-300 sm:gap-6 ${hasStarted ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
+            item={currentItem}
+            items={items}
+            onItemChange={(itemName) => {
+              setCurrentItem(itemName);
+              setInvalidItemName(null);
+            }}
+            onSubmit={handleSubmit}
+          >
           {questions.map((question) => (
             <QuestionnaireItem key={question.name} name={question.name} required>
               <SquircleFrame
@@ -414,7 +390,7 @@ export function QuestionnaireForm({
                   </FrameTitle>
                 </FrameHeader>
 
-                <div className="flex flex-col gap-3 px-3 pb-3 sm:gap-4 sm:px-5 sm:pb-5">
+                <div className="flex flex-col gap-2 px-3 pb-3 sm:gap-4 sm:px-5 sm:pb-5">
                   {question.type !== "text" ? (
                     <QuestionnaireChoices
                       className={`gap-2.5 sm:gap-3 ${currentItem === question.name ? "[animation:questionnaire-content-in_360ms_cubic-bezier(0.2,0,0,1)] motion-reduce:[animation:none]" : ""}`}
@@ -531,11 +507,8 @@ export function QuestionnaireForm({
               </SquircleFrame>
             </QuestionnaireItem>
           ))}
-        </Questionnaire>
-
-        {showScrollFade && hasStarted ? (
-          <div aria-hidden="true" className="questionnaire-scroll-fade pointer-events-none absolute inset-x-4 bottom-0 z-20 h-8 sm:hidden" />
-        ) : null}
+          </Questionnaire>
+        </div>
 
         <SponsorPanel placement={hasStarted ? "top" : "bottom"} />
 
