@@ -32,7 +32,6 @@ const FRAME_VIEWBOX = {
 };
 
 const BASE_SLOT_SIZE = 0.0395;
-const AUTO_PLAY_PAUSE_MS = 1500;
 const STRESS_TEST_WORDS = [
   "amor",
   "carinho",
@@ -115,14 +114,12 @@ function DrawnImages({
   const touchPointersRef = React.useRef(new Map());
   const pinchGestureRef = React.useRef(null);
   const panGestureRef = React.useRef(null);
-  const knownDrawingIdsRef = React.useRef(null);
-  const [reducedMotion, setReducedMotion] = React.useState(false);
   const [viewportSize, setViewportSize] = React.useState({ width: 0, height: 0 });
   const [camera, setCamera] = React.useState(getInitialCamera);
   const [transitionDurationMs, setTransitionDurationMs] = React.useState(2800);
   const [selectedDrawingIndex, setSelectedDrawingIndex] = React.useState(0);
   const isDebugOpen = false;
-  const [isAutoPlayEnabled, setIsAutoPlayEnabled] = React.useState(true);
+  const [isAutoPlayEnabled, setIsAutoPlayEnabled] = React.useState(false);
   const [stressTestDrawings, setStressTestDrawings] = React.useState([]);
   const [minFlowerFontSize, setMinFlowerFontSize] = React.useState(9.5);
   const [maxFlowerFontSize, setMaxFlowerFontSize] = React.useState(14);
@@ -142,14 +139,6 @@ function DrawnImages({
   );
 
   React.useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReducedMotion(media.matches);
-    update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
-  }, []);
-
-  React.useEffect(() => {
     const mobileViewport = window.matchMedia("(max-width: 767px)");
     const updateCameraForViewport = () => {
       setCamera(mobileViewport.matches ? MOBILE_CAMERA : DESKTOP_CAMERA);
@@ -158,15 +147,6 @@ function DrawnImages({
     mobileViewport.addEventListener("change", updateCameraForViewport);
     return () => mobileViewport.removeEventListener("change", updateCameraForViewport);
   }, []);
-
-  React.useLayoutEffect(() => {
-    if (isLoading) return;
-    const ids = new Set(drawings.map((drawing) => drawing.id));
-    if (knownDrawingIdsRef.current && [...ids].some((id) => !knownDrawingIdsRef.current.has(id))) {
-      setIsAutoPlayEnabled(false);
-    }
-    knownDrawingIdsRef.current = ids;
-  }, [drawings, isLoading]);
 
   function toggleStressTest() {
     setSelectedDrawingIndex(0);
@@ -228,29 +208,6 @@ function DrawnImages({
   const selectedTargetX = selectedTarget?.point.x;
   const selectedTargetY = selectedTarget?.point.y;
 
-  React.useEffect(() => {
-    if (!isAutoPlayEnabled || selectedTargetX === undefined || selectedTargetY === undefined) {
-      return;
-    }
-
-    animateCameraToPoint({ x: selectedTargetX, y: selectedTargetY });
-    return () => window.cancelAnimationFrame(animationFrameRef.current);
-  }, [animateCameraToPoint, isAutoPlayEnabled, selectedTargetId, selectedTargetX, selectedTargetY]);
-
-  React.useEffect(() => {
-    if (!isAutoPlayEnabled || drawingTargets.length < 2) {
-      return undefined;
-    }
-
-    const timeoutId = window.setTimeout(() => {
-      setSelectedDrawingIndex((currentIndex) => (
-        currentIndex + 1 >= drawingTargets.length ? 0 : currentIndex + 1
-      ));
-    }, transitionDurationMs + AUTO_PLAY_PAUSE_MS);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [drawingTargets.length, isAutoPlayEnabled, selectedDrawingIndex, transitionDurationMs]);
-
   const baseScale = Math.min(
     viewportSize.width / FRAME_VIEWBOX.width || 0,
     viewportSize.height / FRAME_VIEWBOX.height || 0,
@@ -265,15 +222,13 @@ function DrawnImages({
   const cameraStyle = {
             transform: `translate3d(${translateX}px, ${translateY}px, 0)`,
             transformOrigin: "0 0",
-            transition: !reducedMotion && isAutoPlayEnabled
-              ? `transform ${transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1), width ${transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1), height ${transitionDurationMs}ms cubic-bezier(0.22, 1, 0.36, 1)`
-              : "none",
+            transition: "none",
             width: `${scaledFrameWidth}px`,
             height: `${scaledFrameHeight}px`,
   };
 
   function handleTouchPointerDown(event) {
-    if (event.pointerType !== "touch") return;
+    if (event.button !== 0) return;
 
     const pointers = touchPointersRef.current;
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
@@ -305,7 +260,6 @@ function DrawnImages({
   }
 
   function handleTouchPointerMove(event) {
-    if (event.pointerType !== "touch") return;
     const pointers = touchPointersRef.current;
     if (!pointers.has(event.pointerId)) return;
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
@@ -361,7 +315,6 @@ function DrawnImages({
   }
 
   function handleTouchPointerEnd(event) {
-    if (event.pointerType !== "touch") return;
     touchPointersRef.current.delete(event.pointerId);
     if (touchPointersRef.current.size < 2) pinchGestureRef.current = null;
     if (touchPointersRef.current.size === 1) {
